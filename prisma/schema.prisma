@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model guests {
+  id       Int       @id @unique(map: "guests_UN")
+  table_id Int       @db.TinyInt
+  count    Int       @db.TinyInt
+  enter_at DateTime  @db.Timestamp(0)
+  exit_at  DateTime? @db.Timestamp(0)
+  note     String?   @db.VarChar(100)
+}
+
+model menus {
+  id          Int     @id @unique(map: "menus_UN") @db.TinyInt
+  name        String  @db.VarChar(30)
+  description String? @db.VarChar(100)
+  price       Int     @default(0) @db.SmallInt
+  stock       Int     @default(0) @db.SmallInt
+  source      String? @db.VarChar(200)
+}
+
+model orders {
+  id       Int      @id @unique(map: "orders_UN")
+  menu_id  Int      @db.TinyInt
+  guest_id Int
+  count    Int      @db.TinyInt
+  order_at DateTime @db.Timestamp(0)
+  note     String?  @db.VarChar(100)
+}
+
+model tables {
+  id    Int @id @unique(map: "tables_UN") @db.TinyInt
+  limit Int @db.TinyInt
+}
