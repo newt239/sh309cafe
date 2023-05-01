@@ -4,12 +4,14 @@
  * For more information, see https://remix.run/file-conventions/entry.server
  */
 
-import { PassThrough } from "node:stream";
 import type { EntryContext } from "@remix-run/node";
 import { Response } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
-import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
+
+import { PassThrough } from "node:stream";
+
+import isbot from "isbot";
 
 const ABORT_DELAY = 5_000;
 
@@ -43,9 +45,9 @@ function handleBotRequest(
   return new Promise((resolve, reject) => {
     const { pipe, abort } = renderToPipeableStream(
       <RemixServer
+        abortDelay={ABORT_DELAY}
         context={remixContext}
         url={request.url}
-        abortDelay={ABORT_DELAY}
       />,
       {
         onAllReady() {
@@ -85,9 +87,9 @@ function handleBrowserRequest(
   return new Promise((resolve, reject) => {
     const { pipe, abort } = renderToPipeableStream(
       <RemixServer
+        abortDelay={ABORT_DELAY}
         context={remixContext}
         url={request.url}
-        abortDelay={ABORT_DELAY}
       />,
       {
         onShellReady() {
