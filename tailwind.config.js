@@ -4,6 +4,10 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require("rippleui")]
+  plugins: [require("rippleui")],
+  darkMode: "class",
+  rippleui: {
+    removeThemes: ["dark"],
+  },
 }
 
