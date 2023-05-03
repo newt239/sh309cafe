@@ -1,18 +1,18 @@
 import type { LinksFunction } from "@remix-run/node";
 import {
-  Link,
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration
+  ScrollRestoration,
 } from "@remix-run/react";
 import { useEffect } from "react";
 
 import clsx from "clsx";
 
-import Items from "~/components/sidebar/Items";
+import SideBar from "./components/feature/sidebar/SideBar";
+
 import stylesheet from "~/tailwind.css";
 
 export const links: LinksFunction = () => [
@@ -33,30 +33,23 @@ export default function App() {
           href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"
           rel="stylesheet"
         />
+        <link href="https://fonts.googleapis.com" rel="preconnect" />
+        <link
+          crossOrigin=""
+          href="https://fonts.gstatic.com"
+          rel="preconnect"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
         <Meta />
         <Links />
       </head>
       <body className={clsx("bg-slate-50")}>
         <div className={clsx("flex", "h-screen")}>
-          <nav
-            className={clsx(
-              "w-1/4",
-              "h-full",
-              "bg-slate-500",
-              "text-white",
-              "p-2"
-            )}
-          >
-            <Link to="/">
-              <h1 className={clsx("font-bold", "text-4xl")}>sh309cafe</h1>
-            </Link>
-            <section className="menu-section">
-              <Items />
-            </section>
-          </nav>
-          <div className={clsx("p-2")}>
-            <Outlet />
-          </div>
+          <SideBar />
+          <Outlet />
         </div>
         <ScrollRestoration />
         <Scripts />

@@ -5,8 +5,8 @@ import Item from "./Item";
 export default function Items() {
   const items = [
     { to: "/", children: "ホーム" },
+    { to: "/console/enter", children: "入退室管理" },
     { to: "/stats", children: "統計" },
-    { to: "/console", children: "入退室管理" },
   ];
 
   return (

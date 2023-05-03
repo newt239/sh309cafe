@@ -11,8 +11,10 @@ export default function Item({
   children: ReactNode;
 }) {
   return (
-    <li className={clsx("p-2")}>
-      <Link to={to}>{children}</Link>
-    </li>
+    <Link to={to}>
+      <li className={clsx("p-2", "rounded-xl", "hover:bg-slate-400")}>
+        {children}
+      </li>
+    </Link>
   );
 }
