@@ -21,12 +21,12 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const guestCount = formData.get("guest-count");
   const tableId = formData.get("table-number");
-  const menu = formData.get("menu");
+  const menuId = formData.get("menu");
   const menuCount = formData.get("menu-count");
 
   const datetime = new Date();
 
-  const data = await prisma.guests.create({
+  await prisma.guests.create({
     data: {
       id: datetime.getTime(),
       count: Number(guestCount),
@@ -34,9 +34,17 @@ export async function action({ request }: ActionArgs) {
       enter_at: datetime,
     },
   });
-  console.log(data);
+  await prisma.orders.create({
+    data: {
+      id: datetime.getTime() * 10 + Math.floor(Math.random() * 99),
+      menu_id: Number(menuId),
+      count: Number(menuCount),
+      guest_id: datetime.getTime(),
+      order_at: datetime,
+    },
+  });
 
-  return { menu };
+  return { message: "success" };
 }
 
 export default function Enter() {
