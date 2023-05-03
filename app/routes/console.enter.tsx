@@ -19,7 +19,22 @@ export async function loader() {
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
+  const guestCount = formData.get("guest-count");
+  const tableId = formData.get("table-number");
   const menu = formData.get("menu");
+  const menuCount = formData.get("menu-count");
+
+  const datetime = new Date();
+
+  const data = await prisma.guests.create({
+    data: {
+      id: datetime.getTime(),
+      count: Number(guestCount),
+      table_id: Number(tableId),
+      enter_at: datetime,
+    },
+  });
+  console.log(data);
 
   return { menu };
 }

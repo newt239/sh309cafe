@@ -3,6 +3,7 @@ import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 
 import clsx from "clsx";
+import dayjs from "dayjs";
 
 import H2 from "~/components/common/H2";
 import H3 from "~/components/common/H3";
@@ -54,7 +55,7 @@ export default function Console() {
                   <tr key={guest.id}>
                     <td>{guest.table_id}</td>
                     <td>{guest.count}</td>
-                    <td>{guest.enter_at}</td>
+                    <td>{dayjs(guest.enter_at).format("DD日 HH:mm:ss")}</td>
                   </tr>
                 ))}
                 {data.guests.length === 0 && (
