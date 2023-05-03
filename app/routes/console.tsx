@@ -17,8 +17,10 @@ export const meta: V2_MetaFunction = () => {
 export async function loader() {
   const tables = await prisma.tables.findMany();
   const guests = await prisma.guests.findMany();
+  const currentTables = tables.map(() => 0);
+  guests.map((guest) => (currentTables[guest.table_id - 1] += guest.count));
 
-  return json({ tables, guests });
+  return json({ tables, currentTables, guests });
 }
 
 export default function Console() {
@@ -30,9 +32,9 @@ export default function Console() {
         <H2>入退室管理</H2>
         <H3>テーブル一覧</H3>
         <div className={clsx("p-3", "flex", "flex-wrap", "gap-3")}>
-          {data.tables.map((table) => (
+          {data.tables.map((table, i) => (
             <Table
-              current={1}
+              current={data.currentTables[i]}
               id={table.id}
               key={table.id}
               limit={table.limit}
