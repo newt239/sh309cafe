@@ -26,7 +26,7 @@ export default function Console() {
     <div className={clsx("flex", "w-full")}>
       <div className={clsx("p-3", "grow")}>
         <H2>入退室管理</H2>
-        <div className={clsx("p-3", "flex", "gap-3")}>
+        <div className={clsx("p-3", "flex", "flex-wrap", "gap-3")}>
           {data.tables.map((table) => (
             <Table
               current={1}
@@ -37,18 +37,19 @@ export default function Console() {
           ))}
         </div>
       </div>
-      <div
-        className={clsx(
-          "m-6",
-          "p-3",
-          "w-[300px]",
-          "border-solid",
-          "border-2",
-          "border-sky-500",
-          "rounded-xl"
-        )}
-      >
-        <Outlet />
+      <div className={clsx("p-3", "w-[350px]")}>
+        <div
+          className={clsx(
+            "p-3",
+            "border-solid",
+            "border-2",
+            "border-sky-500",
+            "bg-sky-50",
+            "rounded-xl"
+          )}
+        >
+          <Outlet />
+        </div>
       </div>
     </div>
   );

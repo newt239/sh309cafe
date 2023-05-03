@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 type Props = {
   id: number;
   current: number;
@@ -6,8 +8,9 @@ type Props = {
 
 export default function Table({ id, current, limit }: Props) {
   return (
-    <div className="card">
-      <div className="card-body">
+    <div className={clsx("card", "w-[100px]")}>
+      <div className={clsx("card-body", "p-3")}>
+        <span className="badge badge-primary">No. {id}</span>
         {current} / {limit}
       </div>
     </div>

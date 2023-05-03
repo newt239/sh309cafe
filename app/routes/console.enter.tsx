@@ -1,6 +1,6 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useTransition } from "@remix-run/react";
 
 import clsx from "clsx";
 
@@ -17,32 +17,87 @@ export async function loader() {
   return json({ menus });
 }
 
+export async function action({ request }: ActionArgs) {
+  const formData = await request.formData();
+  const menu = formData.get("menu");
+
+  return { menu };
+}
+
 export default function Enter() {
   const data = useLoaderData<typeof loader>();
+  const transition = useTransition();
 
   return (
     <>
       <Tab type="enter" />
-      <Form method="post">
-        <fieldset>
-          <legend className={clsx("text-2xl")}>メニュー</legend>
-          {data.menus.map((menu, i) => (
-            <label
-              className="flex cursor-pointer gap-2 items-center"
-              key={menu.id}
+      <Form className={clsx("form-group", "py-3")} method="post">
+        <div className={clsx("form-field")}>
+          <label className={clsx("form-label")} htmlFor="guest-count">
+            人数
+          </label>
+          <input
+            className={clsx("input")}
+            defaultValue={4}
+            id="guest-count"
+            max={4}
+            min={0}
+            name="guest-count"
+            type="number"
+          />
+        </div>
+        <div className={clsx("form-field")}>
+          <label className={clsx("form-label")} htmlFor="table-numer">
+            テーブル番号
+          </label>
+          <input
+            className={clsx("input")}
+            defaultValue={1}
+            id="table-numer"
+            max={6}
+            min={1}
+            name="table-number"
+            type="number"
+          />
+        </div>
+        <div className={clsx("form-field")}>
+          <label className={clsx("form-label")} htmlFor="menu">
+            メニュー
+          </label>
+          <select className={clsx("input")} id="menu" name="menu">
+            {data.menus.map((menu) => (
+              <option key={menu.id} value={menu.id}>
+                {menu.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className={clsx("form-field")}>
+          <label className={clsx("form-label")} htmlFor="menu-count">
+            品数
+          </label>
+          <input
+            className={clsx("input")}
+            defaultValue={1}
+            id="menu-count"
+            max={4}
+            min={1}
+            name="menu-count"
+            type="number"
+          />
+        </div>
+
+        <div className="form-field pt-5">
+          <div className="form-control justify-between">
+            <button
+              className="btn btn-primary w-full"
+              disabled={Boolean(transition.submission)}
+              type="submit"
             >
-              <input
-                className="radio"
-                defaultChecked={i === 0}
-                id={`menu-${menu.id}`}
-                name="drone"
-                type="radio"
-                value={menu.id}
-              />
-              <span>{menu.name}</span>
-            </label>
-          ))}
-        </fieldset>
+              送信
+            </button>
+          </div>
+        </div>
       </Form>
     </>
   );
