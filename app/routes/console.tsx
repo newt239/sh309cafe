@@ -16,7 +16,7 @@ export const meta: V2_MetaFunction = () => {
 
 export async function loader() {
   const tables = await prisma.tables.findMany();
-  const guests = await prisma.guests.findMany();
+  const guests = await prisma.guests.findMany({ where: { exit_at: null } });
   const currentTables = tables.map(() => 0);
   guests.map((guest) => (currentTables[guest.table_id - 1] += guest.count));
 
@@ -50,6 +50,7 @@ export default function Console() {
                   <th>テーブル番号</th>
                   <th>人数</th>
                   <th>入店時刻</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -58,6 +59,7 @@ export default function Console() {
                     <td>{guest.table_id}</td>
                     <td>{guest.count}</td>
                     <td>{dayjs(guest.enter_at).format("DD日 HH:mm:ss")}</td>
+                    <td>{dayjs().diff(guest.enter_at, "minute")}分</td>
                   </tr>
                 ))}
                 {data.guests.length === 0 && (
