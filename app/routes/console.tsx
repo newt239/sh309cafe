@@ -7,7 +7,6 @@ import dayjs from "dayjs";
 
 import H2 from "~/components/common/H2";
 import H3 from "~/components/common/H3";
-import Table from "~/components/feature/table/Table";
 import prisma from "~/libs/prisma";
 
 export const meta: V2_MetaFunction = () => {
@@ -15,12 +14,9 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export async function loader() {
-  const tables = await prisma.tables.findMany();
   const guests = await prisma.guests.findMany({ where: { exit_at: null } });
-  const currentTables = tables.map(() => 0);
-  guests.map((guest) => (currentTables[guest.table_id - 1] += guest.count));
 
-  return json({ tables, currentTables, guests });
+  return json({ guests });
 }
 
 export default function Console() {
@@ -30,17 +26,6 @@ export default function Console() {
     <div className={clsx("flex", "w-full")}>
       <div className={clsx("p-3", "grow")}>
         <H2>入退室管理</H2>
-        <H3>テーブル一覧</H3>
-        <div className={clsx("p-3", "flex", "flex-wrap", "gap-3")}>
-          {data.tables.map((table, i) => (
-            <Table
-              current={data.currentTables[i]}
-              id={table.id}
-              key={table.id}
-              limit={table.limit}
-            />
-          ))}
-        </div>
         <div>
           <H3>ゲスト一覧</H3>
           <div className="w-full overflow-x-auto p-3">
@@ -56,7 +41,7 @@ export default function Console() {
               <tbody>
                 {data.guests.map((guest) => (
                   <tr key={guest.id}>
-                    <td>{guest.table_id}</td>
+                    <td>{guest.card_number}</td>
                     <td>{guest.count}</td>
                     <td>{dayjs(guest.enter_at).format("DD日 HH:mm:ss")}</td>
                     <td>{dayjs().diff(guest.enter_at, "minute")}分</td>

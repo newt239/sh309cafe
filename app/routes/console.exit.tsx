@@ -12,10 +12,9 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export async function loader() {
-  const tables = await prisma.tables.findMany();
   const guests = await prisma.guests.findMany({ where: { exit_at: null } });
 
-  return json({ tables, guests });
+  return json({ guests });
 }
 
 export default function Exit() {
