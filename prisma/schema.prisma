@@ -9,12 +9,12 @@ datasource db {
 }
 
 model guests {
-  id       BigInt    @id @unique(map: "guests_UN")
-  table_id Int       @db.TinyInt
-  count    Int       @db.TinyInt
-  enter_at DateTime  @db.Timestamp(0)
-  exit_at  DateTime? @db.Timestamp(0)
-  note     String?   @db.VarChar(100)
+  id          BigInt    @id @unique(map: "guests_UN")
+  card_number Int       @db.SmallInt
+  count       Int       @db.TinyInt
+  enter_at    DateTime  @db.Timestamp(0)
+  exit_at     DateTime? @db.Timestamp(0)
+  note        String?   @db.VarChar(100)
 }
 
 model menus {
@@ -33,9 +33,4 @@ model orders {
   count    Int      @db.TinyInt
   order_at DateTime @db.Timestamp(0)
   note     String?  @db.VarChar(100)
-}
-
-model tables {
-  id    Int @id @unique(map: "tables_UN") @db.TinyInt
-  limit Int @db.TinyInt
 }

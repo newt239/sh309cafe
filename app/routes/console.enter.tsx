@@ -20,7 +20,7 @@ export async function loader() {
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const guestCount = formData.get("guest-count");
-  const tableId = formData.get("table-number");
+  const cardNumber = formData.get("card-number");
   const menuId = formData.get("menu");
   const menuCount = formData.get("menu-count");
 
@@ -30,7 +30,7 @@ export async function action({ request }: ActionArgs) {
     data: {
       id: datetime.getTime(),
       count: Number(guestCount),
-      table_id: Number(tableId),
+      card_number: Number(cardNumber),
       enter_at: datetime,
     },
   });
@@ -70,16 +70,16 @@ export default function Enter() {
           />
         </div>
         <div className={clsx("form-field")}>
-          <label className={clsx("form-label")} htmlFor="table-numer">
+          <label className={clsx("form-label")} htmlFor="card-numer">
             テーブル番号
           </label>
           <input
             className={clsx("input")}
             defaultValue={1}
-            id="table-numer"
-            max={6}
+            id="card-numer"
+            max={30}
             min={1}
-            name="table-number"
+            name="card-number"
             type="number"
           />
         </div>
