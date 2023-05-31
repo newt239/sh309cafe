@@ -16,6 +16,7 @@ model Guest {
   exit_at     DateTime? @db.Timestamp(0)
   note        String?   @db.VarChar(100)
   fee         Int?      @db.SmallInt
+  Order       Order[]
 }
 
 model Menu {
@@ -35,7 +36,9 @@ model Order {
   count    Int      @db.TinyInt
   order_at DateTime @db.Timestamp(0)
   note     String?  @db.VarChar(100)
+  guest   Guest    @relation(fields: [guest_id], references: [id])
   menu     Menu     @relation(fields: [menu_id], references: [id])
 
+  @@index([guest_id])
   @@index([menu_id])
 }

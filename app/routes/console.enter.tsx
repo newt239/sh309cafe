@@ -1,10 +1,12 @@
 import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 
 import clsx from "clsx";
 import { nanoid } from "nanoid";
 
+import OrderInput from "~/components/feature/asidebar/OrderInput";
 import Tab from "~/components/feature/asidebar/Tab";
 import prisma from "~/libs/prisma";
 
@@ -22,8 +24,8 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const guestCount = formData.get("guest-count");
   const cardNumber = formData.get("card-number");
-  const menuId = formData.get("menu");
-  const menuCount = formData.get("menu-count");
+  const menuIdList = formData.getAll("menu_id[]");
+  const menuCountList = formData.getAll("menu_count[]");
 
   const datetime = new Date();
 
@@ -37,14 +39,16 @@ export async function action({ request }: ActionArgs) {
       enter_at: datetime,
     },
   });
-  await prisma.order.create({
-    data: {
-      id: nanoid(10),
-      menu_id: Number(menuId),
-      count: Number(menuCount),
-      guest_id: guestId,
-      order_at: datetime,
-    },
+  await prisma.order.createMany({
+    data: menuIdList.map((menuId, index) => {
+      return {
+        id: nanoid(10),
+        guest_id: guestId,
+        menu_id: Number(menuId),
+        count: Number(menuCountList[index]),
+        order_at: datetime,
+      };
+    }),
   });
 
   return { message: "success" };
@@ -53,11 +57,22 @@ export async function action({ request }: ActionArgs) {
 export default function Enter() {
   const data = useLoaderData<typeof loader>();
   const transition = useTransition();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const isAdding =
+    transition.submission &&
+    transition.submission.formData.get("action") === "create";
+
+  useEffect(() => {
+    if (!isAdding) {
+      formRef.current?.reset();
+    }
+  }, [isAdding]);
 
   return (
     <>
       <Tab type="enter" />
-      <Form className={clsx("form-group", "py-3")} method="post">
+      <Form className={clsx("form-group", "py-3")} method="post" ref={formRef}>
         <div className={clsx("form-field")}>
           <label className={clsx("form-label")} htmlFor="guest-count">
             人数
@@ -86,32 +101,7 @@ export default function Enter() {
             type="number"
           />
         </div>
-        <div className={clsx("form-field")}>
-          <label className={clsx("form-label")} htmlFor="menu">
-            メニュー
-          </label>
-          <select className={clsx("input")} id="menu" name="menu">
-            {data.menus.map((menu) => (
-              <option key={menu.id} value={menu.id}>
-                {menu.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className={clsx("form-field")}>
-          <label className={clsx("form-label")} htmlFor="menu-count">
-            品数
-          </label>
-          <input
-            className={clsx("input")}
-            defaultValue={1}
-            id="menu-count"
-            max={4}
-            min={1}
-            name="menu-count"
-            type="number"
-          />
-        </div>
+        <OrderInput menus={data.menus} refresh={isAdding} />
 
         <div className="form-field pt-5">
           <div className="form-control justify-between">
