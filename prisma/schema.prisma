@@ -29,7 +29,7 @@ model menus {
 model orders {
   id       String   @id @unique(map: "orders_UN") @db.VarChar(10)
   menu_id  Int      @db.TinyInt
-  guest_id Int
+  guest_id String   @db.VarChar(10)
   count    Int      @db.TinyInt
   order_at DateTime @db.Timestamp(0)
   note     String?  @db.VarChar(100)

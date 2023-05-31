@@ -3,6 +3,7 @@ import { json } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 
 import clsx from "clsx";
+import { nanoid } from "nanoid";
 
 import Tab from "~/components/feature/asidebar/Tab";
 import prisma from "~/libs/prisma";
@@ -26,9 +27,11 @@ export async function action({ request }: ActionArgs) {
 
   const datetime = new Date();
 
+  const guestId = nanoid(10);
+
   await prisma.guests.create({
     data: {
-      id: datetime.getTime(),
+      id: guestId,
       count: Number(guestCount),
       card_number: Number(cardNumber),
       enter_at: datetime,
@@ -36,10 +39,10 @@ export async function action({ request }: ActionArgs) {
   });
   await prisma.orders.create({
     data: {
-      id: datetime.getTime() * 10 + Math.floor(Math.random() * 99),
+      id: nanoid(10),
       menu_id: Number(menuId),
       count: Number(menuCount),
-      guest_id: datetime.getTime(),
+      guest_id: guestId,
       order_at: datetime,
     },
   });
