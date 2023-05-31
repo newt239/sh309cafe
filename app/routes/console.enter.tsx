@@ -13,7 +13,7 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export async function loader() {
-  const menus = await prisma.menus.findMany();
+  const menus = await prisma.menu.findMany();
 
   return json({ menus });
 }
@@ -29,7 +29,7 @@ export async function action({ request }: ActionArgs) {
 
   const guestId = nanoid(10);
 
-  await prisma.guests.create({
+  await prisma.guest.create({
     data: {
       id: guestId,
       count: Number(guestCount),
@@ -37,7 +37,7 @@ export async function action({ request }: ActionArgs) {
       enter_at: datetime,
     },
   });
-  await prisma.orders.create({
+  await prisma.order.create({
     data: {
       id: nanoid(10),
       menu_id: Number(menuId),
@@ -74,7 +74,7 @@ export default function Enter() {
         </div>
         <div className={clsx("form-field")}>
           <label className={clsx("form-label")} htmlFor="card-numer">
-            テーブル番号
+            番号札
           </label>
           <input
             className={clsx("input")}

@@ -1,6 +1,6 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 
 import clsx from "clsx";
 import dayjs from "dayjs";
@@ -14,7 +14,7 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export async function loader() {
-  const guests = await prisma.guests.findMany({ where: { exit_at: null } });
+  const guests = await prisma.guest.findMany({ where: { exit_at: null } });
 
   return json({ guests });
 }
@@ -32,7 +32,7 @@ export default function Console() {
             <table className="table">
               <thead>
                 <tr>
-                  <th>テーブル番号</th>
+                  <th>番号札</th>
                   <th>人数</th>
                   <th>入店時刻</th>
                   <th></th>
@@ -41,7 +41,11 @@ export default function Console() {
               <tbody>
                 {data.guests.map((guest) => (
                   <tr key={guest.id}>
-                    <td>{guest.card_number}</td>
+                    <td>
+                      <Link to={`/console/${guest.id}`}>
+                        {guest.card_number}
+                      </Link>
+                    </td>
                     <td>{guest.count}</td>
                     <td>{dayjs(guest.enter_at).format("DD日 HH:mm:ss")}</td>
                     <td>{dayjs().diff(guest.enter_at, "minute")}分</td>
