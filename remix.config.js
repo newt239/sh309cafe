@@ -1,11 +1,6 @@
 /** @type {import('@remix-run/dev').AppConfig} */
 
-const {
-  createRequestHandler,
-} = require("@remix-run/vercel");
-
-module.exports = createRequestHandler({
-  build: require("./build"),
+module.exports = {
   ignoredRouteFiles: ["**/.*"],
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
@@ -18,4 +13,4 @@ module.exports = createRequestHandler({
     v2_routeConvention: true,
     unstable_tailwind: true,
   },
-});
+};

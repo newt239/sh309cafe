@@ -14,7 +14,6 @@
     "@remix-run/node": "^1.16.1",
     "@remix-run/react": "^1.16.1",
     "@remix-run/serve": "^1.16.1",
-    "@remix-run/vercel": "^1.16.1",
     "dayjs": "^1.11.7",
     "isbot": "^3.6.8",
     "react": "^18.2.0",
@@ -36,8 +35,5 @@
     "prisma": "^4.13.0",
     "tailwindcss": "^3.3.2",
     "typescript": "^4.9.5"
-  },
-  "engines": {
-    "node": ">=14"
   }
 }
