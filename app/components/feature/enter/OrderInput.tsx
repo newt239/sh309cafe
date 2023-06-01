@@ -40,6 +40,16 @@ export default function OrderInput({
             <span>オーダー {i + 1}</span>
             <Button
               className={cn("py-0", "px-3", "items-center")}
+              onClick={(e) => {
+                e.preventDefault();
+                setAnswers((answers) => {
+                  if (answers.length === 1) {
+                    return [{ menu_id: 1, count: 1 }];
+                  } else {
+                    return answers.filter((_, n) => n !== i);
+                  }
+                });
+              }}
               variant="secondary"
             >
               <Trash2 className={cn("h-4", "w-4")} />

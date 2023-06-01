@@ -3,10 +3,12 @@ import { json } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 
+import { CupSoda } from "lucide-react";
 import { nanoid } from "nanoid";
 
 import OrderInput from "@/components/feature/enter/OrderInput";
 import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import prisma from "@/lib/prisma";
@@ -72,44 +74,52 @@ export default function Enter() {
   }, [isAdding]);
 
   return (
-    <>
-      <Form method="post" ref={formRef}>
-        <div className={cn("pb-3")}>
-          <Label htmlFor="guest-count">人数</Label>
-          <Input
-            defaultValue={4}
-            id="guest-count"
-            max={4}
-            min={0}
-            name="guest-count"
-            type="number"
-          />
-        </div>
-        <div className={cn("pb-3")}>
-          <Label htmlFor="card-numer">番号札</Label>
-          <Input
-            defaultValue={1}
-            id="card-numer"
-            max={30}
-            min={1}
-            name="card-number"
-            type="number"
-          />
-        </div>
-        <OrderInput menus={data.menus} refresh={isAdding} />
-
-        <div className="form-field pt-5">
-          <div className="form-control justify-between">
-            <Button
-              className="btn btn-primary w-full"
-              disabled={Boolean(transition.submission)}
-              type="submit"
-            >
-              送信
-            </Button>
+    <Card className={cn("w-[380px]")}>
+      <CardHeader>
+        <CardTitle>入店処理</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form method="post" ref={formRef}>
+          <div className={cn("pb-3")}>
+            <Label htmlFor="guest-count">人数</Label>
+            <Input
+              defaultValue={4}
+              id="guest-count"
+              max={4}
+              min={0}
+              name="guest-count"
+              type="number"
+            />
           </div>
-        </div>
-      </Form>
-    </>
+          <div className={cn("pb-3")}>
+            <Label htmlFor="card-numer">番号札</Label>
+            <Input
+              defaultValue={1}
+              id="card-numer"
+              max={30}
+              min={1}
+              name="card-number"
+              type="number"
+            />
+          </div>
+          <OrderInput menus={data.menus} refresh={isAdding} />
+
+          <Button
+            className={cn(
+              "btn",
+              "btn-primary",
+              "w-full",
+              "items-center",
+              "mt-3"
+            )}
+            disabled={Boolean(transition.submission)}
+            type="submit"
+          >
+            <CupSoda className={cn("mr-2", "h-4", "w-4")} />
+            登録する
+          </Button>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

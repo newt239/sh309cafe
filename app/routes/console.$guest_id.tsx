@@ -4,8 +4,21 @@ import { Form, useLoaderData, useTransition } from "@remix-run/react";
 
 import clsx from "clsx";
 import dayjs from "dayjs";
+import { CupSoda } from "lucide-react";
 
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@/components/ui/Table";
 import prisma from "@/lib/prisma";
+import { cn } from "@/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "退室処理" }];
@@ -44,34 +57,50 @@ export default function Exit() {
 
   const { orders } = useLoaderData<typeof loader>();
 
-  console.log(orders);
-
   const amount = orders.reduce((acc, order) => {
     return acc + order.menu.price * order.count;
   }, 0);
 
   return (
-    <>
-      <Form className={clsx("form-group", "py-3")} method="post">
-        <div className="form-field pt-5">
-          <ul>
-            {orders.map((order) => (
-              <li key={order.id}>
-                {order.menu.name}: {order.count}個
-              </li>
-            ))}
-          </ul>
-          <h3>金額</h3>
-          <p>{amount}円</p>
-          <h3>滞在時間</h3>
-          <p>{dayjs().diff(dayjs(orders[0].order_at), "second")}秒</p>
-
-          <div className={clsx("form-field")}>
-            <label className={clsx("form-label")} htmlFor="orders-fee">
-              支払い
-            </label>
-            <input
-              className={clsx("input")}
+    <Card className={cn("w-[380px]")}>
+      <CardHeader>
+        <CardTitle>精算処理</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableHead className="font-medium">番号札</TableHead>
+              <TableCell>ばんごうふだ</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableHead className="font-medium">注文内容</TableHead>
+              <TableCell>
+                <ul>
+                  {orders.map((order) => (
+                    <li key={order.id}>
+                      {order.menu.name}: {order.count}個
+                    </li>
+                  ))}
+                </ul>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableHead className="font-medium">金額</TableHead>
+              <TableCell>{amount}円</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableHead className="font-medium">滞在時間</TableHead>
+              <TableCell>
+                {dayjs().diff(dayjs(orders[0].order_at), "second")}秒
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+        <Form className={clsx("form-group", "py-3")} method="post">
+          <div>
+            <Label htmlFor="orders-fee">精算金額</Label>
+            <Input
               defaultValue={amount}
               id="orders-fee"
               max={2000}
@@ -80,17 +109,23 @@ export default function Exit() {
               type="number"
             />
           </div>
-          <div className="form-control justify-between">
-            <button
-              className="btn btn-primary w-full"
-              disabled={Boolean(transition.submission)}
-              type="submit"
-            >
-              送信
-            </button>
-          </div>
-        </div>
-      </Form>
-    </>
+
+          <Button
+            className={cn(
+              "btn",
+              "btn-primary",
+              "w-full",
+              "items-center",
+              "mt-3"
+            )}
+            disabled={Boolean(transition.submission)}
+            type="submit"
+          >
+            <CupSoda className={cn("mr-2", "h-4", "w-4")} />
+            精算する
+          </Button>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }
