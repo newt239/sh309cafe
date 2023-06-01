@@ -30,11 +30,6 @@
             "pattern": "{react,react-dom/**,react-router-dom,@remix-run/**}",
             "group": "builtin",
             "position": "before"
-          },
-          {
-            "pattern": "~/libs/mantine/**",
-            "group": "builtin",
-            "position": "before"
           }
         ],
         "pathGroupsExcludedImportTypes": ["builtin"],

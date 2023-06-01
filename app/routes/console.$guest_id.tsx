@@ -5,8 +5,8 @@ import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import clsx from "clsx";
 import dayjs from "dayjs";
 
-import Tab from "~/components/feature/asidebar/Tab";
-import prisma from "~/libs/prisma";
+import Tab from "@/components/feature/asidebar/Tab";
+import prisma from "@/lib/prisma";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "退室処理" }];

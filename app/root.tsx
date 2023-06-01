@@ -13,7 +13,7 @@ import clsx from "clsx";
 
 import SideBar from "./components/feature/sidebar/SideBar";
 
-import stylesheet from "~/tailwind.css";
+import stylesheet from "@/tailwind.css";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },

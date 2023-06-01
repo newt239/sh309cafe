@@ -5,9 +5,9 @@ import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
 import dayjs from "dayjs";
 
-import H2 from "~/components/common/H2";
-import H3 from "~/components/common/H3";
-import prisma from "~/libs/prisma";
+import H2 from "@/components/common/H2";
+import H3 from "@/components/common/H3";
+import prisma from "@/lib/prisma";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "店内管理" }];

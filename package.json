@@ -12,15 +12,21 @@
   },
   "dependencies": {
     "@prisma/client": "^4.15.0",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-switch": "^1.0.3",
     "@remix-run/node": "^1.16.1",
     "@remix-run/react": "^1.16.1",
     "@remix-run/serve": "^1.16.1",
+    "class-variance-authority": "^0.6.0",
     "dayjs": "^1.11.7",
     "isbot": "^3.6.8",
+    "lucide-react": "^0.233.0",
     "nanoid": "^3.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rippleui": "^1.12.1"
+    "rippleui": "^1.12.1",
+    "tailwind-merge": "^1.12.0",
+    "tailwindcss-animate": "^1.0.5"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.16.1",

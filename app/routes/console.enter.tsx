@@ -6,9 +6,9 @@ import { useEffect, useRef } from "react";
 import clsx from "clsx";
 import { nanoid } from "nanoid";
 
-import OrderInput from "~/components/feature/asidebar/OrderInput";
-import Tab from "~/components/feature/asidebar/Tab";
-import prisma from "~/libs/prisma";
+import OrderInput from "@/components/feature/asidebar/OrderInput";
+import Tab from "@/components/feature/asidebar/Tab";
+import prisma from "@/lib/prisma";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "入室処理" }];
