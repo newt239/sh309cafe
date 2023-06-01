@@ -5,7 +5,6 @@ import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import clsx from "clsx";
 import dayjs from "dayjs";
 
-import Tab from "@/components/feature/asidebar/Tab";
 import prisma from "@/lib/prisma";
 
 export const meta: V2_MetaFunction = () => {
@@ -53,7 +52,6 @@ export default function Exit() {
 
   return (
     <>
-      <Tab type="exit" />
       <Form className={clsx("form-group", "py-3")} method="post">
         <div className="form-field pt-5">
           <ul>

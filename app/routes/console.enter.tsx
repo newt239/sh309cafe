@@ -3,12 +3,14 @@ import { json } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 
-import clsx from "clsx";
 import { nanoid } from "nanoid";
 
-import OrderInput from "@/components/feature/asidebar/OrderInput";
-import Tab from "@/components/feature/asidebar/Tab";
+import OrderInput from "@/components/feature/enter/OrderInput";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
 import prisma from "@/lib/prisma";
+import { cn } from "@/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "入室処理" }];
@@ -71,14 +73,10 @@ export default function Enter() {
 
   return (
     <>
-      <Tab type="enter" />
-      <Form className={clsx("form-group", "py-3")} method="post" ref={formRef}>
-        <div className={clsx("form-field")}>
-          <label className={clsx("form-label")} htmlFor="guest-count">
-            人数
-          </label>
-          <input
-            className={clsx("input")}
+      <Form method="post" ref={formRef}>
+        <div className={cn("pb-3")}>
+          <Label htmlFor="guest-count">人数</Label>
+          <Input
             defaultValue={4}
             id="guest-count"
             max={4}
@@ -87,12 +85,9 @@ export default function Enter() {
             type="number"
           />
         </div>
-        <div className={clsx("form-field")}>
-          <label className={clsx("form-label")} htmlFor="card-numer">
-            番号札
-          </label>
-          <input
-            className={clsx("input")}
+        <div className={cn("pb-3")}>
+          <Label htmlFor="card-numer">番号札</Label>
+          <Input
             defaultValue={1}
             id="card-numer"
             max={30}
@@ -105,13 +100,13 @@ export default function Enter() {
 
         <div className="form-field pt-5">
           <div className="form-control justify-between">
-            <button
+            <Button
               className="btn btn-primary w-full"
               disabled={Boolean(transition.submission)}
               type="submit"
             >
               送信
-            </button>
+            </Button>
           </div>
         </div>
       </Form>

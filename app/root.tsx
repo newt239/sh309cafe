@@ -29,10 +29,6 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta content="width=device-width,initial-scale=1" name="viewport" />
-        <link
-          href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"
-          rel="stylesheet"
-        />
         <link href="https://fonts.googleapis.com" rel="preconnect" />
         <link
           crossOrigin=""
