@@ -74,8 +74,8 @@ export default function Stats() {
                 ))}
                 {guests.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={3}>
-                      <Alert />
+                    <TableCell colSpan={4}>
+                      <Alert>現在、店内にはゲストがいません。</Alert>
                     </TableCell>
                   </TableRow>
                 )}
