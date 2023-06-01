@@ -1,7 +1,8 @@
 import { Link } from "@remix-run/react";
 import type { ReactNode } from "react";
 
-import clsx from "clsx";
+import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 export default function Item({
   to,
@@ -11,10 +12,12 @@ export default function Item({
   children: ReactNode;
 }) {
   return (
-    <Link to={to}>
-      <li className={clsx("p-2", "rounded-xl", "hover:bg-slate-400")}>
-        {children}
-      </li>
-    </Link>
+    <Button
+      asChild
+      className={cn("w-full", "text-white", "justify-start")}
+      variant="link"
+    >
+      <Link to={to}>{children}</Link>
+    </Button>
   );
 }

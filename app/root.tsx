@@ -11,8 +11,7 @@ import { useEffect } from "react";
 
 import clsx from "clsx";
 
-import SideBar from "./components/feature/sidebar/SideBar";
-
+import SideBar from "@/components/feature/sidebar/SideBar";
 import stylesheet from "@/tailwind.css";
 
 export const links: LinksFunction = () => [

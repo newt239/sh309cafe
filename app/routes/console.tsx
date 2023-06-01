@@ -33,10 +33,10 @@ export default function Console() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <div className={cn("flex", "gap-3", "p-3", "w-full")}>
-      <div className={cn("grow")}>
-        <H2>ゲスト管理</H2>
-        <div className="w-full overflow-x-auto p-3">
+    <div className={cn("p-3", "grow")}>
+      <H2>ゲスト管理</H2>
+      <div className={cn("flex", "gap-3")}>
+        <div className={cn("grow", "overflow-x-auto", "p-3")}>
           <Table>
             <TableHeader>
               <TableRow>
@@ -75,10 +75,10 @@ export default function Console() {
             </tbody>
           </Table>
         </div>
+        <ScrollArea>
+          <Outlet />
+        </ScrollArea>
       </div>
-      <ScrollArea>
-        <Outlet />
-      </ScrollArea>
     </div>
   );
 }
