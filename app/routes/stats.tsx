@@ -1,6 +1,6 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Form, Outlet, useLoaderData } from "@remix-run/react";
 
 import clsx from "clsx";
 import dayjs from "dayjs";
@@ -42,6 +42,30 @@ export async function loader() {
   return json({ menus, guests, orders });
 }
 
+export async function action({ request }: ActionArgs) {
+  const formData = await request.formData();
+  const guest_id = formData.get("action");
+  if (guest_id !== null) {
+    await prisma.guest.update({
+      where: {
+        id: guest_id.toString(),
+      },
+      data: {
+        available: 0,
+      },
+    });
+    await prisma.order.updateMany({
+      where: {
+        guest_id: guest_id.toString(),
+      },
+      data: {
+        available: 0,
+      },
+    });
+  }
+  return { message: guest_id };
+}
+
 export default function Stats() {
   const { menus, guests, orders } = useLoaderData<typeof loader>();
 
@@ -50,13 +74,14 @@ export default function Stats() {
       <H2>統計</H2>
       <div className={cn("flex", "gap-3")}>
         <div className={cn("grow")}>
-          <H3>注文履歴</H3>
+          <H3>ゲスト一覧</H3>
           <ScrollArea className={cn("grow", "overflow-x-auto", "p-3")}>
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>番号札</TableHead>
                   <TableHead>人数</TableHead>
+                  <TableHead>入店時刻</TableHead>
                   <TableHead>滞在時間</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
@@ -67,11 +92,21 @@ export default function Stats() {
                     <TableCell>{guest.card_number}</TableCell>
                     <TableCell>{guest.count}</TableCell>
                     <TableCell>
-                      {dayjs().diff(guest.enter_at, "minutes")}分 (
-                      {dayjs(guest.enter_at).format("HH:mm:ss")})
+                      {dayjs(guest.enter_at).format("HH:mm:ss")}
                     </TableCell>
                     <TableCell>
-                      <Button variant="destructive">取り消す</Button>
+                      {dayjs(guest.exit_at).diff(guest.enter_at, "minutes")}分
+                    </TableCell>
+                    <TableCell>
+                      <Form method="post">
+                        <Button
+                          name="action"
+                          value={guest.id}
+                          variant="destructive"
+                        >
+                          取り消す
+                        </Button>
+                      </Form>
                     </TableCell>
                   </TableRow>
                 ))}
