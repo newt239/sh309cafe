@@ -24,7 +24,9 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export async function loader() {
-  const guests = await prisma.guest.findMany({ where: { exit_at: null } });
+  const guests = await prisma.guest.findMany({
+    where: { exit_at: null, available: 1 },
+  });
 
   return json({ guests });
 }

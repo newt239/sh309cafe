@@ -41,6 +41,7 @@ export async function action({ request }: ActionArgs) {
       count: Number(guestCount),
       card_number: Number(cardNumber),
       enter_at: datetime,
+      available: 1,
     },
   });
   await prisma.order.createMany({
@@ -48,9 +49,10 @@ export async function action({ request }: ActionArgs) {
       return {
         id: nanoid(10),
         guest_id: guestId,
-        menu_id: Number(menuId),
+        menu_id: menuId.toString(),
         count: Number(menuCountList[index]),
         order_at: datetime,
+        available: 1,
       };
     }),
   });

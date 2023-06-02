@@ -28,6 +28,9 @@ export async function loader() {
   const menus = await prisma.menu.findMany();
   const guests = await prisma.guest.findMany({
     take: 20,
+    where: {
+      available: 1,
+    },
     orderBy: [{ enter_at: "desc" }],
     include: { Order: true },
   });

@@ -16,11 +16,12 @@ model Guest {
   exit_at     DateTime? @db.Timestamp(0)
   note        String?   @db.VarChar(100)
   fee         Int?      @db.SmallInt
+  available   Int       @default(1) @db.TinyInt
   Order       Order[]
 }
 
 model Menu {
-  id          Int     @id @unique(map: "menus_UN") @db.TinyInt
+  id          String  @id @unique(map: "menus_UN") @db.VarChar(10)
   name        String  @db.VarChar(30)
   description String? @db.VarChar(100)
   price       Int     @default(0) @db.SmallInt
@@ -30,14 +31,15 @@ model Menu {
 }
 
 model Order {
-  id       String   @id @unique(map: "orders_UN") @db.VarChar(10)
-  menu_id  Int      @db.TinyInt
-  guest_id String   @db.VarChar(10)
-  count    Int      @db.TinyInt
-  order_at DateTime @db.Timestamp(0)
-  note     String?  @db.VarChar(100)
-  guest   Guest    @relation(fields: [guest_id], references: [id])
-  menu     Menu     @relation(fields: [menu_id], references: [id])
+  id        String   @id @unique(map: "orders_UN") @db.VarChar(10)
+  menu_id   String   @db.VarChar(10)
+  guest_id  String   @db.VarChar(10)
+  count     Int      @db.TinyInt
+  order_at  DateTime @db.Timestamp(0)
+  note      String?  @db.VarChar(100)
+  available Int      @default(1) @db.TinyInt
+  guest     Guest    @relation(fields: [guest_id], references: [id])
+  menu      Menu     @relation(fields: [menu_id], references: [id])
 
   @@index([guest_id])
   @@index([menu_id])
