@@ -5,7 +5,6 @@ import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import dayjs from "dayjs";
 import { Calculator } from "lucide-react";
 
-import H2 from "@/components/common/H2";
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { ScrollArea } from "@/components/ui/ScrollArea";
@@ -36,11 +35,10 @@ export default function Console() {
 
   return (
     <div className={cn("grow")}>
-      <div className={cn("flex")}>
+      <div className={cn("flex", "flex-col-reverse", "lg:flex-row")}>
         <ScrollArea
           className={cn("grow", "overflow-x-auto", "h-screen", "p-3")}
         >
-          <H2>ゲスト管理</H2>
           <Table>
             <TableHeader>
               <TableRow>
@@ -79,7 +77,7 @@ export default function Console() {
             </tbody>
           </Table>
         </ScrollArea>
-        <ScrollArea className={cn("h-screen", "p-3")}>
+        <ScrollArea className={cn("h-auto", "lg:h-screen", "p-3")}>
           <Outlet />
         </ScrollArea>
       </div>

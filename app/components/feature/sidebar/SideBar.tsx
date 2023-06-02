@@ -1,17 +1,30 @@
 import { Link } from "@remix-run/react";
 
-import clsx from "clsx";
-
 import Items from "@/components/feature/sidebar/Items";
 import logo from "@/images/logo.jpg";
+import { cn } from "@/lib/utils";
 
 export default function SideBar() {
   return (
     <nav
-      className={clsx("w-[250px]", "h-full", "bg-black", "text-white", "p-2")}
+      className={cn(
+        "w-full",
+        ":w-[250px]",
+        "h-full",
+        "bg-black",
+        "text-white",
+        "p-2",
+        "flex",
+        "flex-col-reverse",
+        "lg:flex-col"
+      )}
     >
       <Link to="/">
-        <img alt="sh309cafe" src={logo} />
+        <img
+          alt="sh309cafe"
+          className={cn("max-w-[300px]", "m-auto")}
+          src={logo}
+        />
       </Link>
       <section className="menu-section">
         <Items />

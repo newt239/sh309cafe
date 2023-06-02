@@ -76,7 +76,7 @@ export default function Enter() {
   }, [isAdding]);
 
   return (
-    <Card className={cn("w-[380px]")}>
+    <Card className={cn("w-full", "lg:w-[380px]")}>
       <CardHeader>
         <CardTitle>入店処理</CardTitle>
       </CardHeader>

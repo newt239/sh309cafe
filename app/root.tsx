@@ -9,7 +9,7 @@ import {
 } from "@remix-run/react";
 import { useEffect } from "react";
 
-import clsx from "clsx";
+import { cn } from "./lib/utils";
 
 import SideBar from "@/components/feature/sidebar/SideBar";
 import stylesheet from "@/tailwind.css";
@@ -41,8 +41,15 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className={clsx("bg-slate-50")}>
-        <div className={clsx("flex", "h-screen")}>
+      <body className={cn("bg-slate-50")}>
+        <div
+          className={cn(
+            "flex",
+            "flex-col-reverse",
+            "lg:flex-row",
+            "lg:h-screen"
+          )}
+        >
           <SideBar />
           <Outlet />
         </div>

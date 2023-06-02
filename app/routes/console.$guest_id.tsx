@@ -62,7 +62,7 @@ export default function Exit() {
   }, 0);
 
   return (
-    <Card className={cn("w-[380px]")}>
+    <Card className={cn("w-full", "lg:w-[380px]")}>
       <CardHeader>
         <CardTitle>精算処理</CardTitle>
       </CardHeader>
