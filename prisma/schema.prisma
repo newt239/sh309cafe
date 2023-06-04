@@ -22,16 +22,6 @@ model Guest {
   Order         Order[]
 }
 
-model Menu {
-  id          String  @id @unique(map: "menus_UN") @db.VarChar(10)
-  name        String  @db.VarChar(30)
-  description String? @db.VarChar(100)
-  price       Int     @default(0) @db.SmallInt
-  stock       Int     @default(0) @db.SmallInt
-  source      String? @db.VarChar(200)
-  Order       Order[]
-}
-
 model Order {
   id        String   @id @unique(map: "orders_UN") @db.VarChar(10)
   menu_id   String   @db.VarChar(10)
@@ -41,8 +31,6 @@ model Order {
   note      String?  @db.VarChar(100)
   available Int      @default(1) @db.TinyInt
   guest     Guest    @relation(fields: [guest_id], references: [id])
-  menu      Menu     @relation(fields: [menu_id], references: [id])
 
   @@index([guest_id])
-  @@index([menu_id])
 }

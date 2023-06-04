@@ -1,11 +1,5 @@
 import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import {
-  Form,
-  useActionData,
-  useLoaderData,
-  useTransition,
-} from "@remix-run/react";
+import { Form, useActionData, useTransition } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 
 import { CupSoda, Minus, Plus } from "lucide-react";
@@ -16,18 +10,13 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
+import { menuList } from "@/lib/menus";
 import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "入室処理" }];
 };
-
-export async function loader() {
-  const menus = await prisma.menu.findMany();
-
-  return json({ menus });
-}
 
 const MAX_CARD_NUMBER = 30;
 
@@ -89,7 +78,6 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function Enter() {
-  const data = useLoaderData<typeof loader>();
   const transition = useTransition();
   const actionData = useActionData();
   const formRef = useRef<HTMLFormElement>(null);
@@ -192,7 +180,7 @@ export default function Enter() {
             )}
           </div>
 
-          <OrderInput menus={data.menus} refresh={isAdding} />
+          <OrderInput menus={menuList} refresh={isAdding} />
 
           <Button
             className={cn(
