@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/Table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { menuList } from "@/lib/menus";
 import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +28,6 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export async function loader() {
-  const menus = await prisma.menu.findMany();
   const guests = await prisma.guest.findMany({
     take: 20,
     where: {
@@ -41,7 +41,7 @@ export async function loader() {
     _sum: { count: true },
   });
 
-  return json({ menus, guests, orders });
+  return json({ guests, orders });
 }
 
 export async function action({ request }: ActionArgs) {
@@ -104,10 +104,10 @@ export default function Stats() {
     );
   };
 
-  const { menus, guests, orders } = useLoaderData<typeof loader>();
+  const { guests, orders } = useLoaderData<typeof loader>();
 
   const pie = orders.map((order) => {
-    const menu = menus.find((menu) => menu.id === order.menu_id);
+    const menu = menuList.find((menu) => menu.id === order.menu_id);
     return { name: menu?.name, value: order._sum.count };
   });
 
