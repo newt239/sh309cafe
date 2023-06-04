@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/Table";
 import { menus } from "@/lib/menus";
 import prisma from "@/lib/prisma";
-import { cn } from "@/lib/utils";
+import { cn, updateCrowdStatus } from "@/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "店内管理" }];
@@ -28,6 +28,9 @@ export async function loader() {
     where: { exit_at: null, available: 1 },
     include: { Order: true },
   });
+
+  const guestCount = guests.reduce((acc, guest) => acc + guest.count, 0);
+  updateCrowdStatus(guestCount);
 
   return json({ guests });
 }
