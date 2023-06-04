@@ -28,36 +28,42 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const guestCount = formData.get("guest-count");
   const cardNumber = formData.get("card-number");
-  const menuIdList = formData.getAll("menu_id[]");
-  const menuCountList = formData.getAll("menu_count[]");
 
   const datetime = new Date();
-
   const guestId = nanoid(10);
+  const orders = [];
 
-  await prisma.guest.create({
-    data: {
-      id: guestId,
-      count: Number(guestCount),
-      card_number: Number(cardNumber),
-      enter_at: datetime,
-      available: 1,
-    },
-  });
-  await prisma.order.createMany({
-    data: menuIdList.map((menuId, index) => {
-      return {
+  for (let i = 0; i < 4; i++) {
+    const menuCount = formData.get(`menu${i + 1}_count`);
+    if (Number(menuCount) > 0) {
+      orders.push({
         id: nanoid(10),
         guest_id: guestId,
-        menu_id: menuId.toString(),
-        count: Number(menuCountList[index]),
+        menu_id: String(i + 1),
+        count: Number(menuCount),
         order_at: datetime,
         available: 1,
-      };
-    }),
-  });
+      });
+    }
+  }
 
-  return { message: "success" };
+  if (orders.length > 0) {
+    await prisma.guest.create({
+      data: {
+        id: guestId,
+        count: Number(guestCount),
+        card_number: Number(cardNumber),
+        enter_at: datetime,
+        available: 1,
+      },
+    });
+    await prisma.order.createMany({
+      data: orders,
+    });
+    return { message: "success" };
+  } else {
+    return { message: "error" };
+  }
 }
 
 export default function Enter() {

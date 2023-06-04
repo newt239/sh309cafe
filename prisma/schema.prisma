@@ -9,15 +9,17 @@ datasource db {
 }
 
 model Guest {
-  id          String    @id @unique(map: "guests_UN") @db.VarChar(10)
-  card_number Int       @db.SmallInt
-  count       Int       @db.TinyInt
-  enter_at    DateTime  @db.Timestamp(0)
-  exit_at     DateTime? @db.Timestamp(0)
-  note        String?   @db.VarChar(100)
-  fee         Int?      @db.SmallInt
-  available   Int       @default(1) @db.TinyInt
-  Order       Order[]
+  id            String    @id @unique(map: "guests_UN") @db.VarChar(10)
+  card_number   Int       @db.SmallInt
+  count         Int       @db.TinyInt
+  enter_at      DateTime  @db.Timestamp(0)
+  exit_at       DateTime? @db.Timestamp(0)
+  note          String?   @db.VarChar(100)
+  fee           Int?      @db.SmallInt
+  has_coupon    Int       @default(0) @db.TinyInt
+  is_short_stay Int       @default(0) @db.TinyInt
+  available     Int       @default(1) @db.TinyInt
+  Order         Order[]
 }
 
 model Menu {
