@@ -1,6 +1,7 @@
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import { useEffect, useState } from "react";
 
 import clsx from "clsx";
 import dayjs from "dayjs";
@@ -10,6 +11,7 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
+import { Switch } from "@/components/ui/Switch";
 import {
   Table,
   TableBody,
@@ -17,6 +19,7 @@ import {
   TableHead,
   TableRow,
 } from "@/components/ui/Table";
+import { menus } from "@/lib/menus";
 import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 
@@ -25,17 +28,19 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export async function loader({ params }: LoaderArgs) {
-  const orders = await prisma.order.findMany({
-    where: { guest_id: params.guest_id },
-    include: { menu: true },
+  const guest = await prisma.guest.findFirst({
+    where: { id: params.guest_id, exit_at: null, available: 1 },
+    include: { Order: true },
   });
 
-  return json({ orders });
+  return json({ guest });
 }
 
 export async function action({ request, params }: ActionArgs) {
   const formData = await request.formData();
   const ordersFee = formData.get("orders-fee");
+  const hasCoupon = formData.get("has_coupon");
+  const isShortStay = formData.get("is_short_stay");
 
   const datetime = new Date();
 
@@ -46,6 +51,8 @@ export async function action({ request, params }: ActionArgs) {
     data: {
       exit_at: datetime,
       fee: Number(ordersFee),
+      has_coupon: hasCoupon === "on" ? 1 : 0,
+      is_short_stay: isShortStay === "on" ? 1 : 0,
     },
   });
 
@@ -54,12 +61,26 @@ export async function action({ request, params }: ActionArgs) {
 
 export default function Exit() {
   const transition = useTransition();
+  const { guest } = useLoaderData<typeof loader>();
+  const [hasCoupon, setHasCoupon] = useState(false);
+  const [isShortStay, setIsShortStay] = useState(false);
 
-  const { orders } = useLoaderData<typeof loader>();
-
-  const amount = orders.reduce((acc, order) => {
-    return acc + order.menu.price * order.count;
+  const amount = guest?.Order.reduce((acc, order) => {
+    return acc + menus[order.menu_id]?.price * order.count;
   }, 0);
+
+  const [fee, setFee] = useState(amount);
+
+  useEffect(() => {
+    if (guest !== null && amount) {
+      setFee(
+        amount -
+          ((hasCoupon ? 50 : 0) + (isShortStay ? 50 : 0)) * guest.Order.length
+      );
+    }
+  }, [hasCoupon, isShortStay]);
+
+  if (guest === null || !amount) return null;
 
   return (
     <Card className={cn("w-full", "lg:w-[380px]")}>
@@ -71,15 +92,15 @@ export default function Exit() {
           <TableBody>
             <TableRow>
               <TableHead className="font-medium">番号札</TableHead>
-              <TableCell>ばんごうふだ</TableCell>
+              <TableCell>{guest.card_number}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-medium">注文内容</TableHead>
               <TableCell>
                 <ul>
-                  {orders.map((order) => (
+                  {guest.Order.map((order) => (
                     <li key={order.id}>
-                      {order.menu.name}: {order.count}個
+                      {menus[order.menu_id]?.name}: {order.count}個
                     </li>
                   ))}
                 </ul>
@@ -92,21 +113,40 @@ export default function Exit() {
             <TableRow>
               <TableHead className="font-medium">滞在時間</TableHead>
               <TableCell>
-                {dayjs().diff(dayjs(orders[0].order_at), "second")}秒
+                {dayjs().diff(dayjs(guest.Order[0].order_at), "second")}秒
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
         <Form className={clsx("form-group", "py-3")} method="post">
+          <div className="flex items-center space-x-2">
+            <Switch
+              checked={hasCoupon}
+              id="has_coupon"
+              name="has_coupon"
+              onCheckedChange={() => setHasCoupon((v) => !v)}
+            />
+            <Label htmlFor="has_coupon">クーポンを使う</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Switch
+              checked={isShortStay}
+              id="is_short_stay"
+              name="is_short_stay"
+              onCheckedChange={() => setIsShortStay((v) => !v)}
+            />
+            <Label htmlFor="is_short_stay">時間割引を使う</Label>
+          </div>
           <div>
             <Label htmlFor="orders-fee">精算金額</Label>
             <Input
-              defaultValue={amount}
               id="orders-fee"
               max={2000}
               min={100}
               name="orders-fee"
+              onChange={(e) => setFee(Number(e.target.value))}
               type="number"
+              value={fee}
             />
           </div>
 

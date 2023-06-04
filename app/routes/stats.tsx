@@ -117,7 +117,6 @@ export default function Stats() {
       <Tabs className={cn("w-full", "pt-3")} defaultValue="guests">
         <TabsList>
           <TabsTrigger value="guests">ゲスト一覧</TabsTrigger>
-          <TabsTrigger value="orders">オーダー一覧</TabsTrigger>
           <TabsTrigger value="pie">売上比</TabsTrigger>
         </TabsList>
         <TabsContent value="guests">
@@ -141,7 +140,10 @@ export default function Stats() {
                     {dayjs(guest.enter_at).format("HH:mm:ss")}
                   </TableCell>
                   <TableCell>
-                    {dayjs(guest.exit_at).diff(guest.enter_at, "minutes")}分
+                    {guest.exit_at
+                      ? dayjs(guest.exit_at).diff(guest.enter_at, "minutes") +
+                        "分"
+                      : "店内"}
                   </TableCell>
                   <TableCell>
                     <Form method="post">
@@ -159,15 +161,12 @@ export default function Stats() {
               {guests.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={4}>
-                    <Alert>現在、店内にはゲストがいません。</Alert>
+                    <Alert>履歴がありません。</Alert>
                   </TableCell>
                 </TableRow>
               )}
             </tbody>
           </Table>
-        </TabsContent>
-        <TabsContent value="orders">
-          <H3>オーダー一覧</H3>
         </TabsContent>
         <TabsContent value="pie">
           <H3>売上比</H3>

@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/Table";
+import { menus } from "@/lib/menus";
 import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 
@@ -25,13 +26,14 @@ export const meta: V2_MetaFunction = () => {
 export async function loader() {
   const guests = await prisma.guest.findMany({
     where: { exit_at: null, available: 1 },
+    include: { Order: true },
   });
 
   return json({ guests });
 }
 
 export default function Console() {
-  const data = useLoaderData<typeof loader>();
+  const { guests } = useLoaderData<typeof loader>();
 
   return (
     <div className={cn("grow")}>
@@ -45,17 +47,25 @@ export default function Console() {
                 <TableHead>番号札</TableHead>
                 <TableHead>人数</TableHead>
                 <TableHead>滞在時間</TableHead>
+                <TableHead>注文内容</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
             <tbody>
-              {data.guests.map((guest) => (
+              {guests.map((guest) => (
                 <TableRow key={guest.id}>
                   <TableCell>{guest.card_number}</TableCell>
                   <TableCell>{guest.count}</TableCell>
                   <TableCell>
                     {dayjs().diff(guest.enter_at, "minutes")}分 (
                     {dayjs(guest.enter_at).format("HH:mm:ss")})
+                  </TableCell>
+                  <TableCell>
+                    {guest.Order.map((order) => (
+                      <div key={order.id}>
+                        {menus[order.menu_id]?.name}: {order.count}個
+                      </div>
+                    ))}
                   </TableCell>
                   <TableCell>
                     <Button asChild variant="link">
@@ -67,7 +77,7 @@ export default function Console() {
                   </TableCell>
                 </TableRow>
               ))}
-              {data.guests.length === 0 && (
+              {guests.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={4}>
                     <Alert>現在、店内にはゲストがいません。</Alert>
