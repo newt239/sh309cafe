@@ -3,7 +3,6 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useEffect, useState } from "react";
 
-import clsx from "clsx";
 import dayjs from "dayjs";
 import { CupSoda } from "lucide-react";
 
@@ -82,6 +81,9 @@ export default function Exit() {
 
   if (guest === null || !amount) return null;
 
+  const minutes = dayjs().diff(dayjs(guest.Order[0].order_at), "second");
+  const duration = `${Math.floor(minutes / 60)}分${minutes % 60}秒`;
+
   return (
     <Card className={cn("w-full", "lg:w-[380px]")}>
       <CardHeader>
@@ -112,14 +114,12 @@ export default function Exit() {
             </TableRow>
             <TableRow>
               <TableHead className="font-medium">滞在時間</TableHead>
-              <TableCell>
-                {dayjs().diff(dayjs(guest.Order[0].order_at), "second")}秒
-              </TableCell>
+              <TableCell>{duration}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
-        <Form className={clsx("form-group", "py-3")} method="post">
-          <div className="flex items-center space-x-2">
+        <Form className={cn("form-group", "py-3")} method="post">
+          <div className={cn("flex", "items-center", "space-x-2", "pb-3")}>
             <Switch
               checked={hasCoupon}
               id="has_coupon"
@@ -128,7 +128,7 @@ export default function Exit() {
             />
             <Label htmlFor="has_coupon">クーポンを使う</Label>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className={cn("flex", "items-center", "space-x-2", "pb-3")}>
             <Switch
               checked={isShortStay}
               id="is_short_stay"

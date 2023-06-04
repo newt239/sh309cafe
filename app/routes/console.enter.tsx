@@ -29,6 +29,8 @@ export async function loader() {
   return json({ menus });
 }
 
+const MAX_CARD_NUMBER = 30;
+
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const guestCount = formData.get("guest-count");
@@ -78,7 +80,9 @@ export async function action({ request }: ActionArgs) {
     await prisma.order.createMany({
       data: orders,
     });
-    return { status: "success" };
+    const newCardNumber =
+      Number(cardNumber) >= MAX_CARD_NUMBER ? 1 : Number(cardNumber) + 1;
+    return { status: "success", newCardNumber };
   } else {
     return { status: "error" };
   }
@@ -98,10 +102,12 @@ export default function Enter() {
     transition.submission.formData.get("action") === "create";
 
   useEffect(() => {
-    if (!isAdding && actionData?.status === "success") {
+    if (actionData?.status === "success") {
       formRef.current?.reset();
+      setGuestCount(4);
+      setCardNumber(actionData?.newCardNumber);
     }
-  }, [isAdding]);
+  }, [actionData]);
 
   return (
     <Card className={cn("w-full", "lg:w-[380px]")}>
@@ -161,7 +167,7 @@ export default function Enter() {
               </Button>
               <Input
                 id="card-numer"
-                max={50}
+                max={MAX_CARD_NUMBER}
                 min={1}
                 name="card-number"
                 onChange={(e) => {
@@ -171,7 +177,7 @@ export default function Enter() {
                 value={cardNumber}
               />
               <Button
-                disabled={cardNumber === 50}
+                disabled={cardNumber === MAX_CARD_NUMBER}
                 onClick={() => {
                   setCardNumber((v) => v + 1);
                 }}
