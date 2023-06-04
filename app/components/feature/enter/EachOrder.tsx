@@ -2,18 +2,14 @@ import { useState } from "react";
 
 import { Minus, Plus } from "lucide-react";
 
-import type { Menu } from "@prisma/client";
+import type { Menu } from "@/lib/types";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { cn } from "@/lib/utils";
 
-type EachOrderProp = {
-  menu: Menu;
-};
-
-const EachOrder: React.FC<EachOrderProp> = ({ menu }) => {
+const EachOrder: React.FC<{ menu: Menu }> = ({ menu }) => {
   const [count, setCount] = useState(0);
 
   return (

@@ -1,15 +1,6 @@
-type MenuProp = {
-  [key: string]: {
-    id: string;
-    name: string;
-    description: string;
-    stock: number;
-    source: string;
-    price: number;
-  };
-};
+import type { MenuObject } from "./types";
 
-export const menus: MenuProp = {
+export const menus: MenuObject = {
   "1": {
     id: "1",
     name: "抹茶フラペチーノ",

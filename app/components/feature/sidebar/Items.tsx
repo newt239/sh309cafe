@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-import Item from "./Item";
+import Item from "@/components/feature/sidebar/Item";
 
 export default function Items() {
   const items = [

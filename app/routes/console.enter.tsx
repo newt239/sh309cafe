@@ -85,10 +85,6 @@ export default function Enter() {
   const [guestCount, setGuestCount] = useState(4);
   const [cardNumber, setCardNumber] = useState(1);
 
-  const isAdding =
-    transition.submission &&
-    transition.submission.formData.get("action") === "create";
-
   useEffect(() => {
     if (actionData?.status === "success") {
       formRef.current?.reset();
@@ -180,7 +176,7 @@ export default function Enter() {
             )}
           </div>
 
-          <OrderInput menus={menuList} refresh={isAdding} />
+          <OrderInput menus={menuList} />
 
           <Button
             className={cn(

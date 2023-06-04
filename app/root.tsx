@@ -9,9 +9,8 @@ import {
 } from "@remix-run/react";
 import { useEffect } from "react";
 
-import { cn } from "./lib/utils";
-
 import SideBar from "@/components/feature/sidebar/SideBar";
+import { cn } from "@/lib/utils";
 import stylesheet from "@/tailwind.css";
 
 export const links: LinksFunction = () => [
