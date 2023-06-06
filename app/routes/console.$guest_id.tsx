@@ -74,7 +74,8 @@ export default function Exit() {
     if (guest !== null && amount) {
       setFee(
         amount -
-          ((hasCoupon ? 50 : 0) + (isShortStay ? 50 : 0)) * guest.Order.length
+          ((hasCoupon ? 50 : 0) + (isShortStay ? 50 : 0) * guest.Order.length) *
+            guest.count
       );
     }
   }, [hasCoupon, isShortStay]);
