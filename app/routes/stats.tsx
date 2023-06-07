@@ -137,7 +137,7 @@ export default function Stats() {
                   <TableCell>{guest.card_number}</TableCell>
                   <TableCell>{guest.count}</TableCell>
                   <TableCell>
-                    {dayjs(guest.enter_at).format("HH:mm:ss")}
+                    {dayjs(guest.enter_at).format("DD日 HH:mm:ss")}
                   </TableCell>
                   <TableCell>
                     {guest.exit_at
