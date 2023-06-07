@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/Table";
 import { menus } from "@/lib/menus";
 import prisma from "@/lib/prisma";
-import { cn, updateCrowdStatus } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "店内管理" }];
@@ -29,8 +29,7 @@ export async function loader() {
     include: { Order: true },
   });
 
-  const guestCount = guests.reduce((acc, guest) => acc + guest.count, 0);
-  updateCrowdStatus(guestCount);
+  // const guestCount = guests.reduce((acc, guest) => acc + guest.count, 0);
 
   return json({ guests });
 }
@@ -64,10 +63,7 @@ export default function Console() {
                   <TableCell>
                     {guest.Order.map((order) => (
                       <div key={order.id}>
-                        {menus[order.menu_id]?.name.replaceAll(
-                          "フラペチーノ",
-                          ""
-                        )}
+                        {menus[order.menu_id]?.name.replace("フラペチーノ", "")}
                         : {order.count}個
                       </div>
                     ))}

@@ -55,7 +55,7 @@ export async function action({ request, params }: ActionArgs) {
     },
   });
 
-  return redirect("/console/enter");
+  return redirect("/console/");
 }
 
 export default function Exit() {
