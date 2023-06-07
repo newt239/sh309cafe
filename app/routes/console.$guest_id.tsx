@@ -82,8 +82,9 @@ export default function Exit() {
 
   if (guest === null || !amount) return null;
 
-  const minutes = dayjs().diff(dayjs(guest.Order[0].order_at), "second");
-  const duration = `${Math.floor(minutes / 60)}分${minutes % 60}秒`;
+  const seconds = dayjs().diff(dayjs(guest.Order[0].order_at), "second");
+  console.log(seconds);
+  const duration = `${Math.floor(seconds / 60)} 分 ${seconds % 60} 秒`;
 
   return (
     <Card className={cn("w-full", "lg:w-[380px]")}>
@@ -96,6 +97,10 @@ export default function Exit() {
             <TableRow>
               <TableHead className="font-medium">番号札</TableHead>
               <TableCell>{guest.card_number}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableHead className="font-medium">人数</TableHead>
+              <TableCell>{guest.count} 人</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-medium">注文内容</TableHead>
@@ -111,11 +116,17 @@ export default function Exit() {
             </TableRow>
             <TableRow>
               <TableHead className="font-medium">金額</TableHead>
-              <TableCell>{amount}円</TableCell>
+              <TableCell>{amount} 円</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-medium">滞在時間</TableHead>
-              <TableCell>{duration}</TableCell>
+              {seconds / 60 <= 17 ? (
+                <TableCell className={cn("text-red-500")}>
+                  {duration} (15分以内での退室)
+                </TableCell>
+              ) : (
+                <TableCell>{duration}</TableCell>
+              )}
             </TableRow>
           </TableBody>
         </Table>
