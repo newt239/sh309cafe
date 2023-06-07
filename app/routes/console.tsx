@@ -64,7 +64,11 @@ export default function Console() {
                   <TableCell>
                     {guest.Order.map((order) => (
                       <div key={order.id}>
-                        {menus[order.menu_id]?.name}: {order.count}個
+                        {menus[order.menu_id]?.name.replaceAll(
+                          "フラペチーノ",
+                          ""
+                        )}
+                        : {order.count}個
                       </div>
                     ))}
                   </TableCell>
