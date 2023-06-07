@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
-import { menuList } from "@/lib/menus";
 import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 
@@ -84,10 +83,12 @@ export default function Enter() {
 
   const [guestCount, setGuestCount] = useState(4);
   const [cardNumber, setCardNumber] = useState(1);
+  const [flag, setFlag] = useState(true);
 
   useEffect(() => {
     if (actionData?.status === "success") {
       formRef.current?.reset();
+      setFlag((v) => !v);
       setGuestCount(4);
       setCardNumber(actionData?.newCardNumber);
     }
@@ -176,7 +177,7 @@ export default function Enter() {
             )}
           </div>
 
-          <OrderInput menus={menuList} />
+          <OrderInput refresh={flag} />
 
           <Button
             className={cn(

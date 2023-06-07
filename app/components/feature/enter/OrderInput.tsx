@@ -1,15 +1,19 @@
 import EachOrder from "./EachOrder";
 
-import type { Menu } from "@/lib/types";
-
+import { menuList } from "@/lib/menus";
 import { cn } from "@/lib/utils";
 
-export default function OrderInput({ menus }: { menus: Menu[] }) {
+type OrderInputProp = {
+  refresh: boolean;
+};
+const OrderInput: React.FC<OrderInputProp> = ({ refresh }) => {
   return (
     <div className={cn("p-3", "pt-6", "mt-3", "rounded-md", "border")}>
-      {menus.map((menu) => (
-        <EachOrder key={menu.id} menu={menu} />
+      {menuList.map((menu) => (
+        <EachOrder key={menu.id} menu={menu} refresh={refresh} />
       ))}
     </div>
   );
-}
+};
+
+export default OrderInput;
