@@ -22,7 +22,7 @@ export default function SideBar() {
       <Link to="/">
         <img
           alt="sh309cafe"
-          className={cn("max-w-[300px]", "m-auto")}
+          className={cn("max-w-[250px]", "m-auto")}
           src={logo}
         />
       </Link>

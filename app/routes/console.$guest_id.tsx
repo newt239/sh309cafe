@@ -142,7 +142,7 @@ export default function Exit() {
             <Label htmlFor="orders-fee">精算金額</Label>
             <Input
               id="orders-fee"
-              max={2000}
+              max={4800}
               min={100}
               name="orders-fee"
               onChange={(e) => setFee(Number(e.target.value))}

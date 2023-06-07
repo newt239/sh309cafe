@@ -41,9 +41,7 @@ export default function Console() {
   return (
     <div className={cn("grow")}>
       <div className={cn("flex", "flex-col-reverse", "lg:flex-row")}>
-        <ScrollArea
-          className={cn("grow", "overflow-x-auto", "h-screen", "p-3")}
-        >
+        <div className={cn("grow", "h-screen", "p-3")}>
           <Table>
             <TableHeader>
               <TableRow>
@@ -89,7 +87,7 @@ export default function Console() {
               )}
             </tbody>
           </Table>
-        </ScrollArea>
+        </div>
         <ScrollArea className={cn("h-auto", "lg:h-screen", "p-3")}>
           <Outlet />
         </ScrollArea>
