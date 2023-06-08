@@ -31,12 +31,15 @@ export const getHourlyOrderCounts = async () => {
       order_at: true,
       count: true,
     },
-    where: {},
+    orderBy: {
+      order_at: "asc",
+    },
   });
 
   const orderCounts: {
     [key: string]: number;
   } = {};
+
   for (const order of orders) {
     const hour = order.order_at.toISOString().slice(0, 13);
     if (!orderCounts[hour]) {

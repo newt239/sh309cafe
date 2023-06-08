@@ -81,7 +81,7 @@ export default function Enter() {
   const actionData = useActionData();
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [guestCount, setGuestCount] = useState(4);
+  const [guestCount, setGuestCount] = useState(2);
   const [cardNumber, setCardNumber] = useState(1);
   const [flag, setFlag] = useState(true);
 
