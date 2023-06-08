@@ -1,4 +1,6 @@
 {
+  "name": "sh309cafe",
+  "version": "1.0.0",
   "private": true,
   "sideEffects": false,
   "scripts": {
