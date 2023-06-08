@@ -89,7 +89,7 @@ export default function Enter() {
     if (actionData?.status === "success") {
       formRef.current?.reset();
       setFlag((v) => !v);
-      setGuestCount(4);
+      setGuestCount(2);
       setCardNumber(actionData?.newCardNumber);
     }
   }, [actionData]);

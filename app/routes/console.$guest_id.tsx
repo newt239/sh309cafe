@@ -85,7 +85,7 @@ export default function Exit() {
           (isShortStay ? 50 : 0) * guest.Order.length
       );
     }
-  }, [hasCoupon, isShortStay]);
+  }, [guest, hasCoupon, isShortStay]);
 
   if (guest === null || !amount) return null;
 
