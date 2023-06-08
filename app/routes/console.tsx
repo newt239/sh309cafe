@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/Table";
 import { menus } from "@/lib/menus";
 import prisma from "@/lib/prisma";
-import { cn } from "@/lib/utils";
+import { cn, updateCrowdStatus } from "@/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "店内管理" }];
@@ -30,7 +30,8 @@ export async function loader() {
     include: { Order: true },
   });
 
-  // const guestCount = guests.reduce((acc, guest) => acc + guest.count, 0);
+  const guestCount = guests.reduce((acc, guest) => acc + guest.count, 0);
+  updateCrowdStatus(guestCount);
 
   return json({ guests });
 }
@@ -41,7 +42,7 @@ export default function Console() {
   return (
     <div className={cn("grow")}>
       <div className={cn("flex", "flex-col-reverse", "lg:flex-row")}>
-        <div className={cn("grow", "h-screen", "p-3")}>
+        <ScrollArea className={cn("grow", "h-screen", "p-3")}>
           <Table>
             <TableHeader>
               <TableRow>
@@ -88,7 +89,7 @@ export default function Console() {
               )}
             </tbody>
           </Table>
-        </div>
+        </ScrollArea>
         <ScrollArea className={cn("h-auto", "lg:h-screen", "p-3")}>
           <Outlet />
         </ScrollArea>

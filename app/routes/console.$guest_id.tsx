@@ -83,7 +83,6 @@ export default function Exit() {
   if (guest === null || !amount) return null;
 
   const seconds = dayjs().diff(dayjs(guest.Order[0].order_at), "second");
-  console.log(seconds);
   const duration = `${Math.floor(seconds / 60)} 分 ${seconds % 60} 秒`;
 
   return (

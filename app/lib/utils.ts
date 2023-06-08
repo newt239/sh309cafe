@@ -7,6 +7,24 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export async function updateCrowdStatus(count: number) {
+  const crowdNumber = Math.max(Math.min(Math.floor((count / 20) * 5), 5), 1);
+  console.log(crowdNumber);
+  try {
+    const url = `${process.env.CROWD_STATUS_SHEET_URL}?value=${crowdNumber}`;
+    const res = await fetch(url, {
+      method: "POST",
+      redirect: "manual",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const getHourlyOrderCounts = async () => {
   const orders = await prisma.order.findMany({
     select: {
