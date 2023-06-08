@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Minus, Plus } from "lucide-react";
 
@@ -9,8 +9,17 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { cn } from "@/lib/utils";
 
-const EachOrder: React.FC<{ menu: Menu }> = ({ menu }) => {
+type EachOrderProp = {
+  menu: Menu;
+  refresh: boolean;
+};
+
+const EachOrder: React.FC<EachOrderProp> = ({ menu, refresh }) => {
   const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    setCount(0);
+  }, [refresh]);
 
   return (
     <>

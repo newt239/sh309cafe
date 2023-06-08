@@ -26,6 +26,7 @@ export const meta: V2_MetaFunction = () => {
 export async function loader() {
   const guests = await prisma.guest.findMany({
     where: { exit_at: null, available: 1 },
+    orderBy: { enter_at: "desc" },
     include: { Order: true },
   });
 
@@ -41,7 +42,7 @@ export default function Console() {
   return (
     <div className={cn("grow")}>
       <div className={cn("flex", "flex-col-reverse", "lg:flex-row")}>
-        <div className={cn("grow", "h-screen", "p-3")}>
+        <ScrollArea className={cn("grow", "h-screen", "p-3")}>
           <Table>
             <TableHeader>
               <TableRow>
@@ -64,10 +65,7 @@ export default function Console() {
                   <TableCell>
                     {guest.Order.map((order) => (
                       <div key={order.id}>
-                        {menus[order.menu_id]?.name.replaceAll(
-                          "フラペチーノ",
-                          ""
-                        )}
+                        {menus[order.menu_id]?.name.replace("フラペチーノ", "")}
                         : {order.count}個
                       </div>
                     ))}
@@ -91,7 +89,7 @@ export default function Console() {
               )}
             </tbody>
           </Table>
-        </div>
+        </ScrollArea>
         <ScrollArea className={cn("h-auto", "lg:h-screen", "p-3")}>
           <Outlet />
         </ScrollArea>
