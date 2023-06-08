@@ -72,9 +72,16 @@ export default function Exit() {
 
   useEffect(() => {
     if (guest !== null && amount) {
+      /*
+      【クーポン割引】
+      ・(注文数 * 50円)引き
+      ・ただし注文数が人数より多い場合は人数分のみ割引く
+      【短時間割引】
+      ・(注文数 * 50円)引き
+    */
       setFee(
         amount -
-          (hasCoupon ? 50 : 0) * guest.count -
+          (hasCoupon ? 50 : 0) * Math.min(guest.count, guest.Order.length) -
           (isShortStay ? 50 : 0) * guest.Order.length
       );
     }
