@@ -8,7 +8,7 @@ type OrderInputProp = {
 };
 const OrderInput: React.FC<OrderInputProp> = ({ refresh }) => {
   return (
-    <div className={cn("p-3", "pt-6", "mt-3", "rounded-md", "border")}>
+    <div className={cn("p-3", "pb-0", "rounded-md", "border")}>
       {menuList.map((menu) => (
         <EachOrder key={menu.id} menu={menu} refresh={refresh} />
       ))}

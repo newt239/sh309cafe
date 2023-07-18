@@ -101,80 +101,82 @@ export default function Enter() {
       </CardHeader>
       <CardContent>
         <Form method="post" ref={formRef}>
-          <div className={cn("pb-3")}>
-            <Label htmlFor="guest-count">人数</Label>
-            <div className={cn("flex", "gap-3", "pb-3")}>
-              <Button
-                disabled={guestCount === 1}
-                onClick={() => {
-                  setGuestCount((v) => v - 1);
-                }}
-                type="button"
-                variant="secondary"
-              >
-                <Minus />
-              </Button>
-              <Input
-                id="guest-count"
-                max={4}
-                min={1}
-                name="guest-count"
-                onChange={(e) => {
-                  setGuestCount(Number(e.target.value));
-                }}
-                type="number"
-                value={guestCount}
-              />
-              <Button
-                disabled={guestCount === 4}
-                onClick={() => {
-                  setGuestCount((v) => v + 1);
-                }}
-                type="button"
-                variant="secondary"
-              >
-                <Plus />
-              </Button>
+          <div>
+            <div className={cn("pb-3")}>
+              <Label htmlFor="guest-count">人数</Label>
+              <div className={cn("flex", "gap-3")}>
+                <Button
+                  disabled={guestCount === 1}
+                  onClick={() => {
+                    setGuestCount((v) => v - 1);
+                  }}
+                  type="button"
+                  variant="secondary"
+                >
+                  <Minus />
+                </Button>
+                <Input
+                  id="guest-count"
+                  max={4}
+                  min={1}
+                  name="guest-count"
+                  onChange={(e) => {
+                    setGuestCount(Number(e.target.value));
+                  }}
+                  type="number"
+                  value={guestCount}
+                />
+                <Button
+                  disabled={guestCount === 4}
+                  onClick={() => {
+                    setGuestCount((v) => v + 1);
+                  }}
+                  type="button"
+                  variant="secondary"
+                >
+                  <Plus />
+                </Button>
+              </div>
             </div>
-          </div>
-          <div className={cn("pb-3")}>
-            <Label htmlFor="card-numer">番号札</Label>
-            <div className={cn("flex", "gap-3", "pb-3")}>
-              <Button
-                disabled={cardNumber === 1}
-                onClick={() => {
-                  setCardNumber((v) => v - 1);
-                }}
-                type="button"
-                variant="secondary"
-              >
-                <Minus />
-              </Button>
-              <Input
-                id="card-numer"
-                max={MAX_CARD_NUMBER}
-                min={1}
-                name="card-number"
-                onChange={(e) => {
-                  setCardNumber(Number(e.target.value));
-                }}
-                type="number"
-                value={cardNumber}
-              />
-              <Button
-                disabled={cardNumber === MAX_CARD_NUMBER}
-                onClick={() => {
-                  setCardNumber((v) => v + 1);
-                }}
-                type="button"
-                variant="secondary"
-              >
-                <Plus />
-              </Button>
+            <div className={cn("pb-3")}>
+              <Label htmlFor="card-numer">番号札</Label>
+              <div className={cn("flex", "gap-3")}>
+                <Button
+                  disabled={cardNumber === 1}
+                  onClick={() => {
+                    setCardNumber((v) => v - 1);
+                  }}
+                  type="button"
+                  variant="secondary"
+                >
+                  <Minus />
+                </Button>
+                <Input
+                  id="card-numer"
+                  max={MAX_CARD_NUMBER}
+                  min={1}
+                  name="card-number"
+                  onChange={(e) => {
+                    setCardNumber(Number(e.target.value));
+                  }}
+                  type="number"
+                  value={cardNumber}
+                />
+                <Button
+                  disabled={cardNumber === MAX_CARD_NUMBER}
+                  onClick={() => {
+                    setCardNumber((v) => v + 1);
+                  }}
+                  type="button"
+                  variant="secondary"
+                >
+                  <Plus />
+                </Button>
+              </div>
+              {actionData?.message && actionData?.id === "card-number" && (
+                <p className="text-red-400">{actionData.message}</p>
+              )}
             </div>
-            {actionData?.message && actionData?.id === "card-number" && (
-              <p className="text-red-400">{actionData.message}</p>
-            )}
           </div>
 
           <OrderInput refresh={flag} />
@@ -191,7 +193,7 @@ export default function Enter() {
             type="submit"
           >
             <CupSoda className={cn("mr-2", "h-4", "w-4")} />
-            登録する
+            注文する
           </Button>
         </Form>
       </CardContent>
