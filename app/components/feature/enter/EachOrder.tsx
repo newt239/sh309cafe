@@ -33,11 +33,12 @@ const EachOrder: React.FC<EachOrderProp> = ({ menu, refresh }) => {
             setCount(count - 1);
           }}
           type="button"
-          variant="secondary"
         >
           <Minus />
         </Button>
         <Input
+          className={cn("disabled:opacity-100")}
+          disabled
           id={`menu${menu.id}_count`}
           max={4}
           min={0}
@@ -55,7 +56,6 @@ const EachOrder: React.FC<EachOrderProp> = ({ menu, refresh }) => {
             setCount(count + 1);
           }}
           type="button"
-          variant="secondary"
         >
           <Plus />
         </Button>
