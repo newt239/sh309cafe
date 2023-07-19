@@ -1,9 +1,9 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData, useTransition } from "@remix-run/react";
 
 import dayjs from "dayjs";
-import { Calculator } from "lucide-react";
+import { Calculator, RotateCw } from "lucide-react";
 
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
@@ -37,12 +37,22 @@ export async function loader() {
 }
 
 export default function Console() {
+  const transition = useTransition();
   const { guests } = useLoaderData<typeof loader>();
 
   return (
-    <div className={cn("grow")}>
-      <div className={cn("flex", "flex-col-reverse", "lg:flex-row")}>
+    <div className={cn("grow", "flex", "flex-col-reverse", "lg:flex-row")}>
+      <div className={cn("grow", "flex", "flex-col")}>
         <ScrollArea className={cn("grow", "h-screen", "p-3")}>
+          <div className={cn("flex", "justify-between", "p-3")}>
+            <div>{guests.length}組</div>
+            {transition.state === "loading" && (
+              <div className={cn("flex", "items-center")}>
+                <RotateCw className="mr-2 h-4 w-4 animate-spin" />
+                <div>読み込み中...</div>
+              </div>
+            )}
+          </div>
           <Table>
             <TableHeader>
               <TableRow>
@@ -90,10 +100,10 @@ export default function Console() {
             </tbody>
           </Table>
         </ScrollArea>
-        <ScrollArea className={cn("h-auto", "lg:h-screen", "p-3")}>
-          <Outlet />
-        </ScrollArea>
       </div>
+      <ScrollArea className={cn("h-auto", "lg:h-screen", "p-3")}>
+        <Outlet />
+      </ScrollArea>
     </div>
   );
 }
