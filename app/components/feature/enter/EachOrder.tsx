@@ -33,7 +33,6 @@ const EachOrder: React.FC<EachOrderProp> = ({ menu, refresh }) => {
             setCount(count - 1);
           }}
           type="button"
-          variant="secondary"
         >
           <Minus />
         </Button>
@@ -55,7 +54,6 @@ const EachOrder: React.FC<EachOrderProp> = ({ menu, refresh }) => {
             setCount(count + 1);
           }}
           type="button"
-          variant="secondary"
         >
           <Plus />
         </Button>

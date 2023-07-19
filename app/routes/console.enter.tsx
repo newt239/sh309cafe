@@ -2,7 +2,7 @@ import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
 import { Form, useActionData, useTransition } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 
-import { CupSoda, Minus, Plus } from "lucide-react";
+import { CupSoda, Minus, Plus, RotateCw } from "lucide-react";
 import { nanoid } from "nanoid";
 
 import OrderInput from "@/components/feature/enter/OrderInput";
@@ -72,7 +72,11 @@ export async function action({ request }: ActionArgs) {
       Number(cardNumber) >= MAX_CARD_NUMBER ? 1 : Number(cardNumber) + 1;
     return { status: "success", newCardNumber };
   } else {
-    return { status: "error" };
+    return {
+      status: "error",
+      id: "no-item",
+      message: "商品が選択されていません。",
+    };
   }
 }
 
@@ -101,84 +105,82 @@ export default function Enter() {
       </CardHeader>
       <CardContent>
         <Form method="post" ref={formRef}>
-          <div className={cn("pb-3")}>
-            <Label htmlFor="guest-count">人数</Label>
-            <div className={cn("flex", "gap-3", "pb-3")}>
-              <Button
-                disabled={guestCount === 1}
-                onClick={() => {
-                  setGuestCount((v) => v - 1);
-                }}
-                type="button"
-                variant="secondary"
-              >
-                <Minus />
-              </Button>
-              <Input
-                id="guest-count"
-                max={4}
-                min={1}
-                name="guest-count"
-                onChange={(e) => {
-                  setGuestCount(Number(e.target.value));
-                }}
-                type="number"
-                value={guestCount}
-              />
-              <Button
-                disabled={guestCount === 4}
-                onClick={() => {
-                  setGuestCount((v) => v + 1);
-                }}
-                type="button"
-                variant="secondary"
-              >
-                <Plus />
-              </Button>
+          <div>
+            <div className={cn("pb-3")}>
+              <Label htmlFor="guest-count">人数</Label>
+              <div className={cn("flex", "gap-3")}>
+                <Button
+                  disabled={guestCount === 1}
+                  onClick={() => {
+                    setGuestCount((v) => v - 1);
+                  }}
+                  type="button"
+                >
+                  <Minus />
+                </Button>
+                <Input
+                  className={cn("disabled:opacity-100")}
+                  disabled
+                  id="guest-count"
+                  max={4}
+                  min={1}
+                  name="guest-count"
+                  onChange={(e) => {
+                    setGuestCount(Number(e.target.value));
+                  }}
+                  type="number"
+                  value={guestCount}
+                />
+                <Button
+                  disabled={guestCount === 4}
+                  onClick={() => {
+                    setGuestCount((v) => v + 1);
+                  }}
+                  type="button"
+                >
+                  <Plus />
+                </Button>
+              </div>
+            </div>
+            <div className={cn("pb-3")}>
+              <Label htmlFor="card-numer">番号札</Label>
+              <div className={cn("flex", "gap-3")}>
+                <Button
+                  disabled={cardNumber === 1}
+                  onClick={() => {
+                    setCardNumber((v) => v - 1);
+                  }}
+                  type="button"
+                >
+                  <Minus />
+                </Button>
+                <Input
+                  id="card-numer"
+                  max={MAX_CARD_NUMBER}
+                  min={1}
+                  name="card-number"
+                  onChange={(e) => {
+                    setCardNumber(Number(e.target.value));
+                  }}
+                  type="number"
+                  value={cardNumber}
+                />
+                <Button
+                  disabled={cardNumber === MAX_CARD_NUMBER}
+                  onClick={() => {
+                    setCardNumber((v) => v + 1);
+                  }}
+                  type="button"
+                >
+                  <Plus />
+                </Button>
+              </div>
+              {actionData?.message && actionData?.id === "card-number" && (
+                <p className="text-red-400">{actionData.message}</p>
+              )}
             </div>
           </div>
-          <div className={cn("pb-3")}>
-            <Label htmlFor="card-numer">番号札</Label>
-            <div className={cn("flex", "gap-3", "pb-3")}>
-              <Button
-                disabled={cardNumber === 1}
-                onClick={() => {
-                  setCardNumber((v) => v - 1);
-                }}
-                type="button"
-                variant="secondary"
-              >
-                <Minus />
-              </Button>
-              <Input
-                id="card-numer"
-                max={MAX_CARD_NUMBER}
-                min={1}
-                name="card-number"
-                onChange={(e) => {
-                  setCardNumber(Number(e.target.value));
-                }}
-                type="number"
-                value={cardNumber}
-              />
-              <Button
-                disabled={cardNumber === MAX_CARD_NUMBER}
-                onClick={() => {
-                  setCardNumber((v) => v + 1);
-                }}
-                type="button"
-                variant="secondary"
-              >
-                <Plus />
-              </Button>
-            </div>
-            {actionData?.message && actionData?.id === "card-number" && (
-              <p className="text-red-400">{actionData.message}</p>
-            )}
-          </div>
-
           <OrderInput refresh={flag} />
-
           <Button
             className={cn(
               "btn",
@@ -190,9 +192,16 @@ export default function Enter() {
             disabled={Boolean(transition.submission)}
             type="submit"
           >
-            <CupSoda className={cn("mr-2", "h-4", "w-4")} />
-            登録する
+            {transition.submission ? (
+              <RotateCw className={cn("mr-2", "h-4", "w-4", "animate-spin")} />
+            ) : (
+              <CupSoda className={cn("mr-2", "h-4", "w-4")} />
+            )}
+            注文する
           </Button>
+          {actionData?.message && actionData?.id === "no-item" && (
+            <p className="text-red-400">{actionData.message}</p>
+          )}
         </Form>
       </CardContent>
     </Card>

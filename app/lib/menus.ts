@@ -7,7 +7,7 @@ export const menus: MenuObject = {
     description: "",
     source: "",
     stock: 180,
-    price: 300,
+    price: 350,
   },
   "2": {
     id: "2",
@@ -15,7 +15,7 @@ export const menus: MenuObject = {
     description: "",
     source: "",
     stock: 180,
-    price: 300,
+    price: 350,
   },
   "3": {
     id: "3",
@@ -23,7 +23,7 @@ export const menus: MenuObject = {
     description: "",
     source: "",
     stock: 120,
-    price: 300,
+    price: 350,
   },
   "4": {
     id: "4",
@@ -31,7 +31,7 @@ export const menus: MenuObject = {
     description: "",
     source: "",
     stock: 120,
-    price: 300,
+    price: 350,
   },
 };
 
