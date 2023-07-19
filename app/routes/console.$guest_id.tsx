@@ -18,6 +18,7 @@ import {
   TableHead,
   TableRow,
 } from "@/components/ui/Table";
+import { useIntervalBy1s } from "@/lib/hooks";
 import { menus } from "@/lib/menus";
 import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
@@ -63,6 +64,10 @@ export default function Exit() {
   const { guest } = useLoaderData<typeof loader>();
   const [hasCoupon, setHasCoupon] = useState(false);
   const [isShortStay, setIsShortStay] = useState(false);
+  const seconds = dayjs().diff(dayjs(guest?.Order[0].order_at), "second");
+  const [durationText, setDurationText] = useState(
+    `${Math.floor(seconds / 60)} 分 ${seconds % 60} 秒`
+  );
 
   const amount = guest?.Order.reduce((acc, order) => {
     return acc + menus[order.menu_id]?.price * order.count;
@@ -87,10 +92,12 @@ export default function Exit() {
     }
   }, [guest, hasCoupon, isShortStay]);
 
-  if (guest === null || !amount) return null;
+  useIntervalBy1s(() => {
+    const diff = dayjs().diff(dayjs(guest?.Order[0].order_at), "second");
+    setDurationText(`${Math.floor(diff / 60)} 分 ${diff % 60} 秒`);
+  });
 
-  const seconds = dayjs().diff(dayjs(guest.Order[0].order_at), "second");
-  const duration = `${Math.floor(seconds / 60)} 分 ${seconds % 60} 秒`;
+  if (guest === null || !amount) return null;
 
   return (
     <Card className={cn("w-full", "lg:w-[380px]")}>
@@ -128,10 +135,10 @@ export default function Exit() {
               <TableHead className="font-medium">滞在時間</TableHead>
               {seconds / 60 <= 17 ? (
                 <TableCell className={cn("text-red-500")}>
-                  {duration} (15分以内での退室)
+                  {durationText} (15分以内での退室)
                 </TableCell>
               ) : (
-                <TableCell>{duration}</TableCell>
+                <TableCell>{durationText}</TableCell>
               )}
             </TableRow>
           </TableBody>
@@ -158,6 +165,7 @@ export default function Exit() {
           <div>
             <Label htmlFor="orders-fee">精算金額</Label>
             <Input
+              className={cn("text-lg", "h-auto")}
               id="orders-fee"
               max={4800}
               min={100}

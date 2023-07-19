@@ -33,19 +33,21 @@ export async function loader() {
   const guestCount = guests.reduce((acc, guest) => acc + guest.count, 0);
   updateCrowdStatus(guestCount);
 
-  return json({ guests });
+  return json({ guests, guestCount });
 }
 
 export default function Console() {
   const transition = useTransition();
-  const { guests } = useLoaderData<typeof loader>();
+  const { guests, guestCount } = useLoaderData<typeof loader>();
 
   return (
     <div className={cn("grow", "flex", "flex-col-reverse", "lg:flex-row")}>
       <div className={cn("grow", "flex", "flex-col")}>
         <ScrollArea className={cn("grow", "h-screen", "p-3")}>
           <div className={cn("flex", "justify-between", "p-3")}>
-            <div>{guests.length}組</div>
+            <div>
+              {guests.length}組 {guestCount}人
+            </div>
             {transition.state === "loading" && (
               <div className={cn("flex", "items-center")}>
                 <RotateCw className="mr-2 h-4 w-4 animate-spin" />
@@ -66,7 +68,9 @@ export default function Console() {
             <tbody>
               {guests.map((guest) => (
                 <TableRow key={guest.id}>
-                  <TableCell>{guest.card_number}</TableCell>
+                  <TableCell className={cn("text-lg")}>
+                    {guest.card_number}
+                  </TableCell>
                   <TableCell>{guest.count}</TableCell>
                   <TableCell>
                     {dayjs().diff(guest.enter_at, "minutes")}分 (
