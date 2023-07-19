@@ -4,8 +4,8 @@ import { Minus, Plus } from "lucide-react";
 
 import type { Menu } from "@/lib/types";
 
+import { InputNumber } from "@/components/common/InputNumber";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { cn } from "@/lib/utils";
 
@@ -36,16 +36,14 @@ const EachOrder: React.FC<EachOrderProp> = ({ menu, refresh }) => {
         >
           <Minus />
         </Button>
-        <Input
-          id={`menu${menu.id}_count`}
+        <InputNumber
           max={4}
           min={0}
           name={`menu${menu.id}_count`}
           onChange={(e) => {
-            setCount(Number(e.target.value));
+            setCount(Number(e));
           }}
-          size={1}
-          type="number"
+          onInvalidNumber={(e) => console.log(e)}
           value={count}
         />
         <Button
