@@ -72,11 +72,14 @@ export default function Exit() {
   const amount = guest?.Order.reduce((acc, order) => {
     return acc + menus[order.menu_id]?.price * order.count;
   }, 0);
+  const orderCount = guest?.Order.reduce((acc, order) => {
+    return acc + order.count;
+  }, 0);
 
   const [fee, setFee] = useState(amount);
 
   useEffect(() => {
-    if (guest !== null && amount) {
+    if (guest !== null && amount && orderCount) {
       /*
       【クーポン割引】
       ・(注文数 * 50円)引き
@@ -86,8 +89,8 @@ export default function Exit() {
     */
       setFee(
         amount -
-          (hasCoupon ? 50 : 0) * Math.min(guest.count, guest.Order.length) -
-          (isShortStay ? 50 : 0) * guest.Order.length
+          (hasCoupon ? 50 : 0) * Math.min(guest.count, orderCount) -
+          (isShortStay ? 50 : 0) * orderCount
       );
     }
   }, [guest, hasCoupon, isShortStay]);
