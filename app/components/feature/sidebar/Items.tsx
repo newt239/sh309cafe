@@ -6,6 +6,7 @@ export default function Items() {
   const items = [
     { to: "/console/enter", children: "入店処理" },
     { to: "/console/", children: "精算処理" },
+    { to: "/history", children: "注文履歴" },
     { to: "/stats", children: "統計" },
   ];
 

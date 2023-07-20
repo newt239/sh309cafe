@@ -1,12 +1,14 @@
 import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useTransition } from "@remix-run/react";
 
 import dayjs from "dayjs";
+import { RotateCw } from "lucide-react";
 
-import H3 from "@/components/common/H3";
+import H2 from "@/components/common/H2";
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
+import { ScrollArea } from "@/components/ui/ScrollArea";
 import {
   Table,
   TableCell,
@@ -15,9 +17,10 @@ import {
   TableRow,
 } from "@/components/ui/Table";
 import prisma from "@/lib/prisma";
+import { cn } from "@/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "統計" }];
+  return [{ title: "注文履歴" }];
 };
 
 export async function loader() {
@@ -57,12 +60,21 @@ export async function action({ request }: ActionArgs) {
   return { message: guest_id };
 }
 
-export default function StatsGuests() {
+export default function History() {
+  const transition = useTransition();
   const { guests } = useLoaderData<typeof loader>();
 
   return (
-    <>
-      <H3>ゲスト一覧</H3>
+    <ScrollArea className={cn("grow", "h-screen", "p-3")}>
+      <div className={cn("flex", "justify-between", "p-3")}>
+        <H2>注文履歴</H2>
+        {transition.state !== "idle" && (
+          <div className={cn("flex", "items-center")}>
+            <RotateCw className="mr-2 h-4 w-4 animate-spin" />
+            <div>読み込み中...</div>
+          </div>
+        )}
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
@@ -88,7 +100,12 @@ export default function StatsGuests() {
               </TableCell>
               <TableCell>
                 <Form method="post">
-                  <Button name="action" value={guest.id} variant="destructive">
+                  <Button
+                    disabled={transition.state !== "idle"}
+                    name="action"
+                    value={guest.id}
+                    variant="destructive"
+                  >
                     取り消す
                   </Button>
                 </Form>
@@ -104,6 +121,6 @@ export default function StatsGuests() {
           )}
         </tbody>
       </Table>
-    </>
+    </ScrollArea>
   );
 }

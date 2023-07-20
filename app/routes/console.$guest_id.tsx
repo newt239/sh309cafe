@@ -4,7 +4,7 @@ import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useEffect, useState } from "react";
 
 import dayjs from "dayjs";
-import { CupSoda } from "lucide-react";
+import { CupSoda, RotateCw } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
@@ -190,7 +190,11 @@ export default function Exit() {
             disabled={Boolean(transition.submission)}
             type="submit"
           >
-            <CupSoda className={cn("mr-2", "h-4", "w-4")} />
+            {transition.submission ? (
+              <RotateCw className={cn("mr-2", "h-4", "w-4", "animate-spin")} />
+            ) : (
+              <CupSoda className={cn("mr-2", "h-4", "w-4")} />
+            )}
             精算する
           </Button>
         </Form>
