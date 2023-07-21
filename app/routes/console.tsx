@@ -143,7 +143,9 @@ export default function Console() {
           </Table>
         </ScrollArea>
       </div>
-      <ScrollArea className={cn("h-auto", "lg:h-screen", "p-3")}>
+      <ScrollArea
+        className={cn("h-auto", "lg:h-screen", "p-3", "min-w-[380px]")}
+      >
         <Outlet />
       </ScrollArea>
     </div>
