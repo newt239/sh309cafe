@@ -1,4 +1,5 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import { json, type V2_MetaFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 
 import H2 from "@/components/common/H2";
 import H3 from "@/components/common/H3";
@@ -8,7 +9,18 @@ export const meta: V2_MetaFunction = () => {
   return [{ title: "2023栄東祭 3年9組 販売管理システム" }];
 };
 
+export async function loader() {
+  return json({
+    ENV: {
+      LINK_OF_MANUAL: process.env.LINK_OF_MANUAL,
+      LINK_OF_SHIFT_TABLE: process.env.LINK_OF_SHIFT_TABLE,
+    },
+  });
+}
+
 export default function Index() {
+  const data = useLoaderData<typeof loader>();
+
   return (
     <div className={cn("p-3", "grow")}>
       <H2>ホーム</H2>
@@ -45,7 +57,7 @@ export default function Index() {
                 "dark:text-blue-500",
                 "hover:underline"
               )}
-              href={process.env.LINK_OF_MANUAL}
+              href={data.ENV.LINK_OF_MANUAL}
               rel="noreferrer"
               target="_blank"
             >
@@ -59,7 +71,7 @@ export default function Index() {
                 "dark:text-blue-500",
                 "hover:underline"
               )}
-              href={process.env.LINK_OF_SHIFT_TABLE}
+              href={data.ENV.LINK_OF_SHIFT_TABLE}
               rel="noreferrer"
               target="_blank"
             >
