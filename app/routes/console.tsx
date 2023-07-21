@@ -89,7 +89,7 @@ export default function Console() {
             </div>
             {transition.state === "loading" && (
               <div className={cn("flex", "items-center")}>
-                <RotateCw />
+                <RotateCw className="mr-2 h-4 w-4" />
                 <div>読み込み中...</div>
               </div>
             )}

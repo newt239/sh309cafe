@@ -14,7 +14,7 @@ import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "入室処理" }];
+  return [{ title: "入店処理" }];
 };
 
 const MAX_CARD_NUMBER = 30;

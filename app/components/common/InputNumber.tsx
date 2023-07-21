@@ -9,6 +9,7 @@ type Props = {
   onInvalidNumber: (value: string) => void;
   min?: number;
   max?: number;
+  className?: string;
 };
 
 export const InputNumber = ({
@@ -18,6 +19,7 @@ export const InputNumber = ({
   onInvalidNumber,
   min,
   max,
+  className,
 }: Props) => {
   const [localValue, setLocalValue] = useState<string>(`${value}`);
 
@@ -48,6 +50,7 @@ export const InputNumber = ({
 
   return (
     <Input
+      className={className}
       inputMode="numeric"
       name={name}
       onChange={(e) => onChangeHandler(e.target.value)}
