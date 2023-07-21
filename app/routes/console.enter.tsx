@@ -140,7 +140,7 @@ export default function Enter() {
               </div>
             </div>
             <div className={cn("pb-3")}>
-              <Label htmlFor="card-numer">番号札</Label>
+              <Label htmlFor="card-number">番号札</Label>
               <div className={cn("flex", "gap-3")}>
                 <Button
                   disabled={cardNumber <= 1}

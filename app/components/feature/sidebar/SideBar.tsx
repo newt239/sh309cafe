@@ -9,7 +9,7 @@ export default function SideBar() {
     <nav
       className={cn(
         "w-full",
-        ":w-[250px]",
+        "lg:w-[250px]",
         "h-full",
         "bg-black",
         "text-white",
@@ -20,11 +20,7 @@ export default function SideBar() {
       )}
     >
       <Link to="/">
-        <img
-          alt="sh309cafe"
-          className={cn("max-w-[250px]", "m-auto")}
-          src={logo}
-        />
+        <img alt="sh309cafe" className={cn("m-auto")} src={logo} />
       </Link>
       <section className="menu-section">
         <Items />

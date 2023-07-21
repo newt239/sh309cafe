@@ -191,13 +191,13 @@ export default function Exit() {
               "flex",
               "items-center",
               "justify-start",
-              "gap-3",
+              "gap-4",
               "pb-3"
             )}
           >
             <div>
               <Label htmlFor="discount-50-count">50円引人数</Label>
-              <div className={cn("flex", "gap-3")}>
+              <div className={cn("flex", "gap-2")}>
                 <Button
                   className={cn("py-1", "px-2")}
                   disabled={discount50Count <= 0}
@@ -232,7 +232,7 @@ export default function Exit() {
             </div>
             <div>
               <Label htmlFor="discount-150-count">150円引人数</Label>
-              <div className={cn("flex", "gap-3")}>
+              <div className={cn("flex", "gap-2")}>
                 <Button
                   className={cn("py-1", "px-2")}
                   disabled={discount150Count <= 0}
@@ -271,8 +271,8 @@ export default function Exit() {
             <Label htmlFor="orders-fee">精算金額</Label>
             <InputNumber
               className={cn("text-lg", "h-auto")}
-              max={4800}
-              min={100}
+              max={5600}
+              min={0}
               name="orders-fee"
               onChange={(e) => setFee(Number(e))}
               onInvalidNumber={(e) => console.error(e)}
