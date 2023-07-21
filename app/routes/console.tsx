@@ -47,9 +47,8 @@ export async function loader() {
 export default function Console() {
   const transition = useTransition();
   const fetcher = useFetcher();
-  const { guests, guestCount, a } = useLoaderData<typeof loader>();
+  const { guests, guestCount } = useLoaderData<typeof loader>();
   const [lastUpdate, setLastUpdate] = useState<Dayjs>(dayjs());
-  console.log(a);
 
   const updateData = () => {
     fetcher.load("/console");

@@ -110,7 +110,7 @@ export default function Enter() {
               <Label htmlFor="guest-count">人数</Label>
               <div className={cn("flex", "gap-3")}>
                 <Button
-                  disabled={guestCount === 1}
+                  disabled={guestCount <= 1}
                   onClick={() => {
                     setGuestCount((v) => v - 1);
                   }}
@@ -129,7 +129,7 @@ export default function Enter() {
                   value={guestCount}
                 />
                 <Button
-                  disabled={guestCount === 4}
+                  disabled={guestCount >= 4}
                   onClick={() => {
                     setGuestCount((v) => v + 1);
                   }}
@@ -143,7 +143,7 @@ export default function Enter() {
               <Label htmlFor="card-numer">番号札</Label>
               <div className={cn("flex", "gap-3")}>
                 <Button
-                  disabled={cardNumber === 1}
+                  disabled={cardNumber <= 1}
                   onClick={() => {
                     setCardNumber((v) => v - 1);
                   }}
@@ -160,7 +160,7 @@ export default function Enter() {
                   value={cardNumber}
                 />
                 <Button
-                  disabled={cardNumber === MAX_CARD_NUMBER}
+                  disabled={cardNumber >= MAX_CARD_NUMBER}
                   onClick={() => {
                     setCardNumber((v) => v + 1);
                   }}
