@@ -4,7 +4,7 @@ import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useEffect, useState } from "react";
 
 import dayjs from "dayjs";
-import { CupSoda, RotateCw } from "lucide-react";
+import { CupSoda, Minus, Plus, RotateCw } from "lucide-react";
 
 import { InputNumber } from "@/components/common/InputNumber";
 import { Button } from "@/components/ui/Button";
@@ -68,6 +68,8 @@ export default function Exit() {
   const [durationText, setDurationText] = useState(
     `${Math.floor(seconds / 60)} 分 ${seconds % 60} 秒`
   );
+  const [discount50Count, setDiscount50Count] = useState(0);
+  const [discount150Count, setDiscount150Count] = useState(0);
 
   const amount =
     guest?.Order.reduce((acc, order) => {
@@ -87,14 +89,21 @@ export default function Exit() {
       ・ただし注文数が人数より多い場合は人数分のみ割引く
       【短時間割引】
       ・(注文数 * 50円)引き
+      【◯円引】
+      ・(人数 * ◯円)引き
     */
-      setFee(
-        amount -
-          (hasCoupon ? 50 : 0) * Math.min(guest.count, orderCount) -
-          (isShortStay ? 50 : 0) * orderCount
-      );
+      let discount = 0;
+      if (hasCoupon) {
+        discount += 50 * Math.min(guest.count, orderCount);
+      }
+      if (isShortStay) {
+        discount += 50 * orderCount;
+      }
+      discount += 50 * discount50Count + 150 * discount150Count;
+
+      setFee(amount - discount);
     }
-  }, [guest, hasCoupon, isShortStay]);
+  }, [guest, hasCoupon, isShortStay, discount50Count, discount150Count]);
 
   useIntervalBy1s(() => {
     const diff = dayjs().diff(dayjs(guest?.Order[0].order_at), "second");
@@ -109,7 +118,7 @@ export default function Exit() {
         <CardTitle>精算処理</CardTitle>
       </CardHeader>
       <CardContent>
-        <Table>
+        <Table className={cn("mb-3")}>
           <TableBody>
             <TableRow>
               <TableHead className="font-medium">番号札</TableHead>
@@ -147,26 +156,118 @@ export default function Exit() {
             </TableRow>
           </TableBody>
         </Table>
-        <Form className={cn("form-group", "py-3")} method="post">
-          <div className={cn("flex", "items-center", "space-x-2", "pb-3")}>
-            <Switch
-              checked={hasCoupon}
-              id="has_coupon"
-              name="has_coupon"
-              onCheckedChange={() => setHasCoupon((v) => !v)}
-            />
-            <Label htmlFor="has_coupon">クーポンを使う</Label>
+        <Form className={cn("form-group")} method="post">
+          <div
+            className={cn(
+              "flex",
+              "items-center",
+              "justify-start",
+              "gap-3",
+              "pb-3"
+            )}
+          >
+            <div className={cn("flex", "items-center", "gap-1")}>
+              <Switch
+                checked={hasCoupon}
+                id="has_coupon"
+                name="has_coupon"
+                onCheckedChange={() => setHasCoupon((v) => !v)}
+              />
+              <Label htmlFor="has_coupon">クーポンを使う</Label>
+            </div>
+            <div className={cn("flex", "items-center", "gap-1")}>
+              <Switch
+                checked={isShortStay}
+                id="is_short_stay"
+                name="is_short_stay"
+                onCheckedChange={() => setIsShortStay((v) => !v)}
+              />
+              <Label htmlFor="is_short_stay">時間割引を使う</Label>
+            </div>
           </div>
-          <div className={cn("flex", "items-center", "space-x-2", "pb-3")}>
-            <Switch
-              checked={isShortStay}
-              id="is_short_stay"
-              name="is_short_stay"
-              onCheckedChange={() => setIsShortStay((v) => !v)}
-            />
-            <Label htmlFor="is_short_stay">時間割引を使う</Label>
+
+          <div
+            className={cn(
+              "flex",
+              "items-center",
+              "justify-start",
+              "gap-3",
+              "pb-3"
+            )}
+          >
+            <div>
+              <Label htmlFor="discount-50-count">50円引人数</Label>
+              <div className={cn("flex", "gap-3")}>
+                <Button
+                  className={cn("py-1", "px-2")}
+                  disabled={discount50Count <= 0}
+                  onClick={() => {
+                    setDiscount50Count((v) => v - 1);
+                  }}
+                  type="button"
+                >
+                  <Minus />
+                </Button>
+                <InputNumber
+                  max={guest.count - discount150Count}
+                  min={0}
+                  name="discount-50-count"
+                  onChange={(e) => {
+                    setDiscount50Count(e);
+                  }}
+                  onInvalidNumber={(e) => console.error(e)}
+                  value={discount50Count}
+                />
+                <Button
+                  className={cn("py-1", "px-2")}
+                  disabled={discount50Count + discount150Count >= guest.count}
+                  onClick={() => {
+                    setDiscount50Count((v) => v + 1);
+                  }}
+                  type="button"
+                >
+                  <Plus />
+                </Button>
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="discount-150-count">150円引人数</Label>
+              <div className={cn("flex", "gap-3")}>
+                <Button
+                  className={cn("py-1", "px-2")}
+                  disabled={discount150Count <= 0}
+                  onClick={() => {
+                    setDiscount150Count((v) => v - 1);
+                  }}
+                  type="button"
+                >
+                  <Minus />
+                </Button>
+                <InputNumber
+                  max={guest.count - discount150Count}
+                  min={0}
+                  name="discount-150-count"
+                  onChange={(e) => {
+                    setDiscount150Count(e);
+                  }}
+                  onInvalidNumber={(e) => console.error(e)}
+                  value={discount150Count}
+                />
+                <Button
+                  className={cn("py-1", "px-2")}
+                  disabled={discount50Count + discount150Count >= guest.count}
+                  onClick={() => {
+                    setDiscount150Count((v) => v + 1);
+                  }}
+                  type="button"
+                >
+                  <Plus />
+                </Button>
+              </div>
+            </div>
           </div>
-          <div>
+
+          <div className={cn("pb-3")}>
             <Label htmlFor="orders-fee">精算金額</Label>
             <InputNumber
               className={cn("text-lg", "h-auto")}
@@ -180,13 +281,7 @@ export default function Exit() {
           </div>
 
           <Button
-            className={cn(
-              "btn",
-              "btn-primary",
-              "w-full",
-              "items-center",
-              "mt-3"
-            )}
+            className={cn("btn", "btn-primary", "w-full", "items-center")}
             disabled={Boolean(transition.submission)}
             type="submit"
           >

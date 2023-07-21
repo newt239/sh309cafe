@@ -10,7 +10,8 @@
     "start": "remix-serve build",
     "typecheck": "tsc",
     "prettier": "npx prettier --write ./{app,tests}/**/*.{ts,tsx}",
-    "eslint": "npx eslint --fix ./{app,tests}/**/*.{ts,tsx}"
+    "eslint": "npx eslint --fix ./{app,tests}/**/*.{ts,tsx}",
+    "prisma": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.15.0",
