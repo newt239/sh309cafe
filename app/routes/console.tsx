@@ -1,8 +1,15 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useTransition } from "@remix-run/react";
+import {
+  Link,
+  Outlet,
+  useFetcher,
+  useLoaderData,
+  useTransition,
+} from "@remix-run/react";
+import { useEffect, useState } from "react";
 
-import dayjs from "dayjs";
+import dayjs, { type Dayjs } from "dayjs";
 import { Calculator, RotateCw } from "lucide-react";
 
 import H2 from "@/components/common/H2";
@@ -34,24 +41,54 @@ export async function loader() {
   const guestCount = guests.reduce((acc, guest) => acc + guest.count, 0);
   updateCrowdStatus(guestCount);
 
-  return json({ guests, guestCount });
+  return json({ guests, guestCount, a: Math.random() });
 }
 
 export default function Console() {
   const transition = useTransition();
+  const fetcher = useFetcher();
   const { guests, guestCount } = useLoaderData<typeof loader>();
+  const [lastUpdate, setLastUpdate] = useState<Dayjs>(dayjs());
+
+  const updateData = () => {
+    fetcher.load("/console");
+    setLastUpdate(dayjs());
+  };
+
+  const interval = 30 * 1000;
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      updateData();
+    }, interval);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [fetcher]);
 
   return (
     <div className={cn("grow", "flex", "flex-col-reverse", "lg:flex-row")}>
       <div className={cn("grow", "flex", "flex-col")}>
         <ScrollArea className={cn("grow", "h-screen", "p-3")}>
           <div className={cn("flex", "justify-between", "p-3")}>
-            <H2>
-              {guests.length}組 {guestCount}人
-            </H2>
+            <div
+              className={cn("flex", "justify-start", "items-center", "gap-3")}
+            >
+              <H2>
+                {guests.length}組 {guestCount}人
+              </H2>
+              <Button
+                className={cn("flex", "items-center")}
+                disabled={transition.state !== "idle"}
+                onClick={updateData}
+              >
+                <RotateCw className="mr-2 h-4 w-4" />
+                <div>更新する</div>
+              </Button>
+              <p>最終更新: {lastUpdate.format("HH:mm:ss")}</p>
+            </div>
             {transition.state === "loading" && (
               <div className={cn("flex", "items-center")}>
-                <RotateCw className="mr-2 h-4 w-4 animate-spin" />
+                <RotateCw className="mr-2 h-4 w-4" />
                 <div>読み込み中...</div>
               </div>
             )}
@@ -97,7 +134,7 @@ export default function Console() {
               ))}
               {guests.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={4}>
+                  <TableCell colSpan={5}>
                     <Alert>現在、店内にはゲストがいません。</Alert>
                   </TableCell>
                 </TableRow>

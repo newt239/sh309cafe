@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { CupSoda, RotateCw } from "lucide-react";
 
+import { InputNumber } from "@/components/common/InputNumber";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Switch } from "@/components/ui/Switch";
 import {
@@ -69,9 +69,10 @@ export default function Exit() {
     `${Math.floor(seconds / 60)} 分 ${seconds % 60} 秒`
   );
 
-  const amount = guest?.Order.reduce((acc, order) => {
-    return acc + menus[order.menu_id]?.price * order.count;
-  }, 0);
+  const amount =
+    guest?.Order.reduce((acc, order) => {
+      return acc + menus[order.menu_id]?.price * order.count;
+    }, 0) || 0;
   const orderCount = guest?.Order.reduce((acc, order) => {
     return acc + order.count;
   }, 0);
@@ -167,14 +168,13 @@ export default function Exit() {
           </div>
           <div>
             <Label htmlFor="orders-fee">精算金額</Label>
-            <Input
+            <InputNumber
               className={cn("text-lg", "h-auto")}
-              id="orders-fee"
               max={4800}
               min={100}
               name="orders-fee"
-              onChange={(e) => setFee(Number(e.target.value))}
-              type="number"
+              onChange={(e) => setFee(Number(e))}
+              onInvalidNumber={(e) => console.error(e)}
               value={fee}
             />
           </div>

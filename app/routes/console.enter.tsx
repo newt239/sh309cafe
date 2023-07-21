@@ -14,7 +14,7 @@ import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "入室処理" }];
+  return [{ title: "入店処理" }];
 };
 
 const MAX_CARD_NUMBER = 30;
@@ -110,7 +110,7 @@ export default function Enter() {
               <Label htmlFor="guest-count">人数</Label>
               <div className={cn("flex", "gap-3")}>
                 <Button
-                  disabled={guestCount === 1}
+                  disabled={guestCount <= 1}
                   onClick={() => {
                     setGuestCount((v) => v - 1);
                   }}
@@ -125,11 +125,11 @@ export default function Enter() {
                   onChange={(e) => {
                     setGuestCount(Number(e));
                   }}
-                  onInvalidNumber={(e) => console.log(e)}
+                  onInvalidNumber={(e) => console.error(e)}
                   value={guestCount}
                 />
                 <Button
-                  disabled={guestCount === 4}
+                  disabled={guestCount >= 4}
                   onClick={() => {
                     setGuestCount((v) => v + 1);
                   }}
@@ -143,7 +143,7 @@ export default function Enter() {
               <Label htmlFor="card-numer">番号札</Label>
               <div className={cn("flex", "gap-3")}>
                 <Button
-                  disabled={cardNumber === 1}
+                  disabled={cardNumber <= 1}
                   onClick={() => {
                     setCardNumber((v) => v - 1);
                   }}
@@ -156,11 +156,11 @@ export default function Enter() {
                   min={1}
                   name="card-number"
                   onChange={(e) => setCardNumber(e)}
-                  onInvalidNumber={(e) => console.log(e)}
+                  onInvalidNumber={(e) => console.error(e)}
                   value={cardNumber}
                 />
                 <Button
-                  disabled={cardNumber === MAX_CARD_NUMBER}
+                  disabled={cardNumber >= MAX_CARD_NUMBER}
                   onClick={() => {
                     setCardNumber((v) => v + 1);
                   }}
