@@ -1,4 +1,4 @@
-import type { LinksFunction } from "@remix-run/node";
+import { type LinksFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -15,6 +15,11 @@ import stylesheet from "@/tailwind.css";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
+  {
+    rel: "icon",
+    href: "/logo.svg",
+    type: "image/png",
+  },
 ];
 
 export default function App() {

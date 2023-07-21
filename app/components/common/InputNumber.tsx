@@ -53,6 +53,7 @@ export const InputNumber = ({
   return (
     <Input
       className={className}
+      id={name}
       inputMode="numeric"
       name={name}
       onChange={(e) => onChangeHandler(e.target.value)}

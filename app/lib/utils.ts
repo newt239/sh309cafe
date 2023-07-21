@@ -29,8 +29,8 @@ export const getHourlyOrderCounts = async () => {
     where: {
       AND: {
         order_at: {
-          // 直近3日分を表示
-          gte: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
+          // 直近2日分を表示
+          gte: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 2),
         },
       },
     },
@@ -50,7 +50,7 @@ export const getHourlyOrderCounts = async () => {
     };
   } = {};
 
-  let time = dayjs().subtract(3, "day");
+  let time = dayjs().subtract(2, "day");
   while (time.isBefore(dayjs())) {
     orderCounts[time.format("YYYY-MM-DD HH:00:00")] = {
       "1": 0,

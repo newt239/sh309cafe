@@ -14,10 +14,11 @@ model Guest {
   count         Int       @db.TinyInt
   enter_at      DateTime  @db.Timestamp(0)
   exit_at       DateTime? @db.Timestamp(0)
-  note          String?   @db.VarChar(100)
   fee           Int?      @db.SmallInt
   has_coupon    Int       @default(0) @db.TinyInt
   is_short_stay Int       @default(0) @db.TinyInt
+  discount_50 Int    @default(0) @db.TinyInt
+  discount_150 Int    @default(0) @db.TinyInt
   available     Int       @default(1) @db.TinyInt
   Order         Order[]
 }
@@ -28,7 +29,6 @@ model Order {
   guest_id  String   @db.VarChar(10)
   count     Int      @db.TinyInt
   order_at  DateTime @db.Timestamp(0)
-  note      String?  @db.VarChar(100)
   available Int      @default(1) @db.TinyInt
   guest     Guest    @relation(fields: [guest_id], references: [id])
 

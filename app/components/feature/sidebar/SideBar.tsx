@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react";
 
 import Items from "@/components/feature/sidebar/Items";
-import logo from "@/images/logo.jpg";
+import logo from "@/images/logo.svg";
 import { cn } from "@/lib/utils";
 
 export default function SideBar() {
@@ -9,7 +9,7 @@ export default function SideBar() {
     <nav
       className={cn(
         "w-full",
-        ":w-[250px]",
+        "lg:w-[250px]",
         "h-full",
         "bg-black",
         "text-white",
@@ -19,12 +19,8 @@ export default function SideBar() {
         "lg:flex-col"
       )}
     >
-      <Link to="/">
-        <img
-          alt="sh309cafe"
-          className={cn("max-w-[250px]", "m-auto")}
-          src={logo}
-        />
+      <Link className={cn("m-auto", "my-0")} to="/">
+        <img alt="sh309cafe" className={cn("w-[200px]")} src={logo} />
       </Link>
       <section className="menu-section">
         <Items />
