@@ -125,7 +125,7 @@ export default function Enter() {
                   onChange={(e) => {
                     setGuestCount(Number(e));
                   }}
-                  onInvalidNumber={(e) => console.log(e)}
+                  onInvalidNumber={(e) => console.error(e)}
                   value={guestCount}
                 />
                 <Button
@@ -156,7 +156,7 @@ export default function Enter() {
                   min={1}
                   name="card-number"
                   onChange={(e) => setCardNumber(e)}
-                  onInvalidNumber={(e) => console.log(e)}
+                  onInvalidNumber={(e) => console.error(e)}
                   value={cardNumber}
                 />
                 <Button

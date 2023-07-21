@@ -43,7 +43,7 @@ const EachOrder: React.FC<EachOrderProp> = ({ menu, refresh }) => {
           onChange={(e) => {
             setCount(Number(e));
           }}
-          onInvalidNumber={(e) => console.log(e)}
+          onInvalidNumber={(e) => console.error(e)}
           value={count}
         />
         <Button

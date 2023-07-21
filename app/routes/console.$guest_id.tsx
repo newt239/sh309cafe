@@ -174,7 +174,7 @@ export default function Exit() {
               min={100}
               name="orders-fee"
               onChange={(e) => setFee(Number(e))}
-              onInvalidNumber={(e) => console.log(e)}
+              onInvalidNumber={(e) => console.error(e)}
               value={fee}
             />
           </div>
