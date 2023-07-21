@@ -33,8 +33,8 @@ export default function Stats() {
   return (
     <ScrollArea className={cn("h-full", "p-3", "grow")}>
       <div className={cn("p-3", "flex", "flex-col", "gap-3")}>
-        <Pie data={data} title="売上比" />
         <Hourly data={hourlyOrderCounts} title="時間帯別売上" />
+        <Pie data={data} title="売上比" />
       </div>
     </ScrollArea>
   );
