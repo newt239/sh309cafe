@@ -1,37 +1,41 @@
-import type { V2_MetaFunction } from "@remix-run/node";
-import { Link, Outlet } from "@remix-run/react";
+import { json, type V2_MetaFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 
-import H2 from "@/components/common/H2";
-import { Button } from "@/components/ui/Button";
+import Hourly from "@/components/feature/stats/Bar";
+import Pie from "@/components/feature/stats/Pie";
 import { ScrollArea } from "@/components/ui/ScrollArea";
-import { cn } from "@/lib/utils";
+import { menuList } from "@/lib/menus";
+import prisma from "@/lib/prisma";
+import { cn, getHourlyOrderCounts } from "@/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "統計" }];
 };
 
+export async function loader() {
+  const orders = await prisma.order.groupBy({
+    by: ["menu_id"],
+    _sum: { count: true },
+  });
+  const hourlyOrderCounts = await getHourlyOrderCounts();
+
+  return json({ orders, hourlyOrderCounts });
+}
+
 export default function Stats() {
-  const links = [
-    { to: "/stats/guests", text: "ゲスト一覧" },
-    { to: "/stats/pie", text: "売上比" },
-    { to: "/stats/bar", text: "時間帯別売上" },
-  ];
+  const { orders, hourlyOrderCounts } = useLoaderData<typeof loader>();
+
+  const data = orders.map((order) => {
+    const menu = menuList.find((menu) => menu.id === order.menu_id);
+    return { name: menu?.name || "unknown", value: order._sum.count || 0 };
+  });
 
   return (
     <ScrollArea className={cn("h-full", "p-3", "grow")}>
-      <H2>統計</H2>
-      <div>
-        <ul className={cn("list-disc")}>
-          {links.map((link) => (
-            <li key={link.text}>
-              <Button asChild variant="link">
-                <Link to={link.to}>{link.text}</Link>
-              </Button>
-            </li>
-          ))}
-        </ul>
+      <div className={cn("p-3", "flex", "flex-col", "gap-3")}>
+        <Pie data={data} title="売上比" />
+        <Hourly data={hourlyOrderCounts} title="時間帯別売上" />
       </div>
-      <Outlet />
     </ScrollArea>
   );
 }

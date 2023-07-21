@@ -4,7 +4,7 @@ import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useEffect, useState } from "react";
 
 import dayjs from "dayjs";
-import { CupSoda } from "lucide-react";
+import { CupSoda, RotateCw } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
@@ -72,11 +72,14 @@ export default function Exit() {
   const amount = guest?.Order.reduce((acc, order) => {
     return acc + menus[order.menu_id]?.price * order.count;
   }, 0);
+  const orderCount = guest?.Order.reduce((acc, order) => {
+    return acc + order.count;
+  }, 0);
 
   const [fee, setFee] = useState(amount);
 
   useEffect(() => {
-    if (guest !== null && amount) {
+    if (guest !== null && amount && orderCount) {
       /*
       【クーポン割引】
       ・(注文数 * 50円)引き
@@ -86,8 +89,8 @@ export default function Exit() {
     */
       setFee(
         amount -
-          (hasCoupon ? 50 : 0) * Math.min(guest.count, guest.Order.length) -
-          (isShortStay ? 50 : 0) * guest.Order.length
+          (hasCoupon ? 50 : 0) * Math.min(guest.count, orderCount) -
+          (isShortStay ? 50 : 0) * orderCount
       );
     }
   }, [guest, hasCoupon, isShortStay]);
@@ -187,7 +190,11 @@ export default function Exit() {
             disabled={Boolean(transition.submission)}
             type="submit"
           >
-            <CupSoda className={cn("mr-2", "h-4", "w-4")} />
+            {transition.submission ? (
+              <RotateCw className={cn("mr-2", "h-4", "w-4", "animate-spin")} />
+            ) : (
+              <CupSoda className={cn("mr-2", "h-4", "w-4")} />
+            )}
             精算する
           </Button>
         </Form>

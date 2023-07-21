@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
+import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
 
 import prisma from "@/lib/prisma";
@@ -27,8 +28,17 @@ export async function updateCrowdStatus(count: number) {
 
 export const getHourlyOrderCounts = async () => {
   const orders = await prisma.order.findMany({
+    where: {
+      AND: {
+        order_at: {
+          // 直近3日分を表示
+          gte: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
+        },
+      },
+    },
     select: {
       order_at: true,
+      menu_id: true,
       count: true,
     },
     orderBy: {
@@ -37,21 +47,42 @@ export const getHourlyOrderCounts = async () => {
   });
 
   const orderCounts: {
-    [key: string]: number;
+    [key: string]: {
+      [key: string]: number;
+    };
   } = {};
 
-  for (const order of orders) {
-    const hour = order.order_at.toISOString().slice(0, 13);
-    if (!orderCounts[hour]) {
-      orderCounts[hour] = 0;
-    }
-    orderCounts[hour] += order.count;
+  let time = dayjs().subtract(3, "day");
+  while (time.isBefore(dayjs())) {
+    orderCounts[time.format("YYYY-MM-DD HH:00:00")] = {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+    };
+    time = time.add(1, "hour");
   }
 
-  const result = Object.entries(orderCounts).map(([hour, orderCount]) => ({
-    hour,
-    orderCount,
-  }));
+  for (const order of orders) {
+    const hour = dayjs(order.order_at).format("YYYY-MM-DD HH:00:00");
+    if (!orderCounts[hour]) {
+      orderCounts[hour] = {};
+    }
+    orderCounts[hour][order.menu_id] += order.count;
+  }
+
+  const result = Object.entries(orderCounts)
+    .map(([hour, orderCount]) => ({
+      hour,
+      "1": orderCount["1"],
+      "2": orderCount["2"],
+      "3": orderCount["3"],
+      "4": orderCount["4"],
+    }))
+    .map((hour) => ({
+      ...hour,
+      total: hour["1"] + hour["2"] + hour["3"] + hour["4"],
+    }));
 
   return result;
 };

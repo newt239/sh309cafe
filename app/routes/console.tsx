@@ -5,6 +5,7 @@ import { Link, Outlet, useLoaderData, useTransition } from "@remix-run/react";
 import dayjs from "dayjs";
 import { Calculator, RotateCw } from "lucide-react";
 
+import H2 from "@/components/common/H2";
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { ScrollArea } from "@/components/ui/ScrollArea";
@@ -45,9 +46,9 @@ export default function Console() {
       <div className={cn("grow", "flex", "flex-col")}>
         <ScrollArea className={cn("grow", "h-screen", "p-3")}>
           <div className={cn("flex", "justify-between", "p-3")}>
-            <div>
+            <H2>
               {guests.length}組 {guestCount}人
-            </div>
+            </H2>
             {transition.state === "loading" && (
               <div className={cn("flex", "items-center")}>
                 <RotateCw className="mr-2 h-4 w-4 animate-spin" />

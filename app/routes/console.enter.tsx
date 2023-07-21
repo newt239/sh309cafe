@@ -5,10 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { CupSoda, Minus, Plus, RotateCw } from "lucide-react";
 import { nanoid } from "nanoid";
 
+import { InputNumber } from "@/components/common/InputNumber";
 import OrderInput from "@/components/feature/enter/OrderInput";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
@@ -118,17 +118,14 @@ export default function Enter() {
                 >
                   <Minus />
                 </Button>
-                <Input
-                  className={cn("disabled:opacity-100")}
-                  disabled
-                  id="guest-count"
+                <InputNumber
                   max={4}
                   min={1}
                   name="guest-count"
                   onChange={(e) => {
-                    setGuestCount(Number(e.target.value));
+                    setGuestCount(Number(e));
                   }}
-                  type="number"
+                  onInvalidNumber={(e) => console.log(e)}
                   value={guestCount}
                 />
                 <Button
@@ -154,15 +151,12 @@ export default function Enter() {
                 >
                   <Minus />
                 </Button>
-                <Input
-                  id="card-numer"
+                <InputNumber
                   max={MAX_CARD_NUMBER}
                   min={1}
                   name="card-number"
-                  onChange={(e) => {
-                    setCardNumber(Number(e.target.value));
-                  }}
-                  type="number"
+                  onChange={(e) => setCardNumber(e)}
+                  onInvalidNumber={(e) => console.log(e)}
                   value={cardNumber}
                 />
                 <Button
