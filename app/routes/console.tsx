@@ -3,13 +3,13 @@ import { json } from "@remix-run/node";
 import {
   Link,
   Outlet,
-  useFetcher,
   useLoaderData,
+  useNavigate,
   useTransition,
 } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import dayjs, { type Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { Calculator, RotateCw } from "lucide-react";
 
 import H2 from "@/components/common/H2";
@@ -46,13 +46,12 @@ export async function loader() {
 
 export default function Console() {
   const transition = useTransition();
-  const fetcher = useFetcher();
+  const navigate = useNavigate();
   const { guests, guestCount } = useLoaderData<typeof loader>();
-  const [lastUpdate, setLastUpdate] = useState<Dayjs>(dayjs());
+  const lastUpdate = dayjs();
 
   const updateData = () => {
-    fetcher.load("/console");
-    setLastUpdate(dayjs());
+    navigate(".", { replace: true });
   };
 
   const interval = 30 * 1000;
@@ -63,7 +62,7 @@ export default function Console() {
     return () => {
       clearInterval(intervalId);
     };
-  }, [fetcher]);
+  }, []);
 
   return (
     <div className={cn("grow", "flex", "flex-col-reverse", "lg:flex-row")}>
@@ -76,14 +75,6 @@ export default function Console() {
               <H2>
                 {guests.length}組 {guestCount}人
               </H2>
-              <Button
-                className={cn("flex", "items-center")}
-                disabled={transition.state !== "idle"}
-                onClick={updateData}
-              >
-                <RotateCw className="mr-2 h-4 w-4" />
-                <div>更新する</div>
-              </Button>
               <p>最終更新: {lastUpdate.format("HH:mm:ss")}</p>
             </div>
             {transition.state === "loading" && (
