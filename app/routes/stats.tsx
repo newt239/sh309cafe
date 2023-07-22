@@ -23,12 +23,16 @@ export async function loader() {
   const sumOrderCount = orders.reduce((acc, order) => {
     return acc + (order._sum.count || 0);
   }, 0);
-  const sumFee = orders.reduce((acc, order) => {
-    const menu = menuList.find((menu) => menu.id === order.menu_id);
-    return acc + (menu?.price || 0) * (order._sum.count || 0);
-  }, 0);
+  const result = await prisma.guest.aggregate({
+    _sum: { fee: true },
+  });
 
-  return json({ orders, hourlyOrderCounts, sumOrderCount, sumFee });
+  return json({
+    orders,
+    hourlyOrderCounts,
+    sumOrderCount,
+    sumFee: result._sum.fee,
+  });
 }
 
 export default function Stats() {
@@ -54,7 +58,7 @@ export default function Stats() {
               <span className={cn("text-gray-500")}>総売上</span>
               <span className={cn("text-2xl")}>{sumFee} 円</span>
             </div>
-            <div className={cn("flex", "flex-col", "gap-1")}>
+            <div className={cn("flex", "flex-col", "gap-1", "pt-3")}>
               <span className={cn("text-gray-500")}>総注文数</span>
               <span className={cn("text-2xl")}>{sumOrderCount} 個</span>
             </div>

@@ -83,8 +83,8 @@ export default function Index() {
         <H3>アプリ情報</H3>
         <ul className={cn("list-disc", "pl-5", "pt-2")}>
           <li>2023栄東祭 3年9組 販売管理システム</li>
-          <li>v1.5.0</li>
-          <li>最終更新: 2023/07/23 03:35</li>
+          <li>v1.5.1</li>
+          <li>最終更新: 2023/07/23 00:50</li>
         </ul>
       </div>
     </div>
