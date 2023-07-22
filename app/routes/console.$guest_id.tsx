@@ -41,6 +41,8 @@ export async function action({ request, params }: ActionArgs) {
   const ordersFee = formData.get("orders-fee");
   const hasCoupon = formData.get("has_coupon");
   const isShortStay = formData.get("is_short_stay");
+  const isDiscount50 = formData.get("discount-50-count");
+  const isDiscount150 = formData.get("discount-150-count");
 
   const datetime = new Date();
 
@@ -53,6 +55,8 @@ export async function action({ request, params }: ActionArgs) {
       fee: Number(ordersFee),
       has_coupon: hasCoupon === "on" ? 1 : 0,
       is_short_stay: isShortStay === "on" ? 1 : 0,
+      discount_50: isDiscount50 === "on" ? 1 : 0,
+      discount_150: isDiscount150 === "on" ? 1 : 0,
     },
   });
 
