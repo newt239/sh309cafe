@@ -129,7 +129,7 @@ export default function Enter() {
                   value={guestCount}
                 />
                 <Button
-                  disabled={guestCount >= 4}
+                  disabled={guestCount >= 6}
                   onClick={() => {
                     setGuestCount((v) => v + 1);
                   }}
