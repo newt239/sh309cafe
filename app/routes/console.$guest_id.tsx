@@ -146,9 +146,9 @@ export default function Exit() {
             </TableRow>
             <TableRow>
               <TableHead className="font-medium">滞在時間</TableHead>
-              {seconds / 60 <= 20 ? (
+              {seconds / 60 <= 15 ? (
                 <TableCell className={cn("text-red-500")}>
-                  {durationText} (20分以内での退室)
+                  {durationText} (15分以内での退室)
                 </TableCell>
               ) : (
                 <TableCell>{durationText}</TableCell>
