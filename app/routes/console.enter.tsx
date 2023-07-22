@@ -119,7 +119,7 @@ export default function Enter() {
                   <Minus />
                 </Button>
                 <InputNumber
-                  max={4}
+                  max={6}
                   min={1}
                   name="guest-count"
                   onChange={(e) => {

@@ -11,7 +11,7 @@ export type PieProps = {
 };
 
 const Pie: React.FC<PieProps> = ({ title, data }) => (
-  <Card className={cn("w-1/3")} decoration="top">
+  <Card className={cn("w-full", "sm:w-1/2", "lg:w-1/3")} decoration="top">
     <Title>{title}</Title>
     <DonutChart
       category="value"

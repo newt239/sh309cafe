@@ -1,8 +1,14 @@
 import { clsx, type ClassValue } from "clsx";
 import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import { twMerge } from "tailwind-merge";
 
 import prisma from "@/lib/prisma";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Tokyo");
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -62,7 +68,10 @@ export const getHourlyOrderCounts = async () => {
   }
 
   for (const order of orders) {
-    const hour = dayjs(order.order_at).format("YYYY-MM-DD HH:00:00");
+    const hour = dayjs(order.order_at)
+      .utc()
+      .utcOffset(9)
+      .format("YYYY-MM-DD HH:00:00");
     if (!orderCounts[hour]) {
       orderCounts[hour] = {};
     }

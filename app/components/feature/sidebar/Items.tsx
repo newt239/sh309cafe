@@ -4,6 +4,7 @@ import Item from "@/components/feature/sidebar/Item";
 
 export default function Items() {
   const items = [
+    { to: "/", children: "ホーム" },
     { to: "/console/enter", children: "入店処理" },
     { to: "/console/", children: "精算処理" },
     { to: "/history", children: "注文履歴" },
