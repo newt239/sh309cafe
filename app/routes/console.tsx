@@ -1,13 +1,6 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import {
-  Link,
-  Outlet,
-  useLoaderData,
-  useNavigate,
-  useTransition,
-} from "@remix-run/react";
-import { useEffect } from "react";
+import { Link, Outlet, useLoaderData, useTransition } from "@remix-run/react";
 
 import dayjs from "dayjs";
 import { Calculator, RotateCw } from "lucide-react";
@@ -46,23 +39,8 @@ export async function loader() {
 
 export default function Console() {
   const transition = useTransition();
-  const navigate = useNavigate();
   const { guests, guestCount } = useLoaderData<typeof loader>();
   const lastUpdate = dayjs();
-
-  const updateData = () => {
-    navigate(".", { replace: true });
-  };
-
-  const interval = 30 * 1000;
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      updateData();
-    }, interval);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
 
   return (
     <div className={cn("grow", "flex", "flex-col-reverse", "lg:flex-row")}>
