@@ -1,5 +1,6 @@
-import { Card, DonutChart, Title } from "@tremor/react";
+import { Card, DonutChart, Legend, Title } from "@tremor/react";
 
+import { COLORS } from "@/lib/const";
 import { cn } from "@/lib/utils";
 
 export type PieProps = {
@@ -11,16 +12,22 @@ export type PieProps = {
 };
 
 const Pie: React.FC<PieProps> = ({ title, data }) => (
-  <Card className={cn("w-full", "sm:w-1/2", "lg:w-1/3")} decoration="top">
+  <Card className={cn("w-full", "lg:w-2/3")} decoration="top">
     <Title>{title}</Title>
-    <DonutChart
-      category="value"
-      colors={["blue", "green", "yellow", "red"]}
-      data={data}
-      index="name"
-      showLabel
-      variant="pie"
-    />
+    <div className={cn("flex", "flex-row", "gap-1")}>
+      <DonutChart
+        category="value"
+        colors={["blue", "green", "yellow", "red"]}
+        data={data}
+        index="name"
+        variant="pie"
+      />
+      <Legend
+        categories={data.map((d) => d.name)}
+        className={cn("flex-col", "grow", "w-1/2")}
+        colors={COLORS}
+      />
+    </div>
   </Card>
 );
 
