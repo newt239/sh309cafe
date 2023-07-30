@@ -56,11 +56,15 @@ export default function Stats() {
           >
             <div className={cn("flex", "flex-col", "gap-1")}>
               <span className={cn("text-gray-500")}>総売上</span>
-              <span className={cn("text-2xl")}>{sumFee} 円</span>
+              <span className={cn("text-2xl")}>
+                {sumFee?.toLocaleString("en")} 円
+              </span>
             </div>
             <div className={cn("flex", "flex-col", "gap-1", "pt-3")}>
               <span className={cn("text-gray-500")}>総注文数</span>
-              <span className={cn("text-2xl")}>{sumOrderCount} 個</span>
+              <span className={cn("text-2xl")}>
+                {sumOrderCount.toLocaleString("en")} 個
+              </span>
             </div>
           </Card>
         </div>
