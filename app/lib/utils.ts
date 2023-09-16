@@ -35,7 +35,6 @@ export const getHourlyOrderCounts = async () => {
     where: {
       AND: {
         order_at: {
-          gte: new Date("2023-07-22T07:00:00"),
           lt: new Date("2023-07-23T17:00:00"),
         },
       },
